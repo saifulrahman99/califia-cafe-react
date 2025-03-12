@@ -3,31 +3,31 @@ import axiosInstance from '@/api/axiosInstance';
 function MenuService() {
     const getAll = async (query) => {
         const {data} = await axiosInstance.get("/menus", {params: query});
-        return data.data;
+        return data;
     }
 
     const create = async (payload) => {
         const {data} = await axiosInstance.post('/menus', payload);
-        return data.data;
+        return data;
     }
 
     const getById = async (id) => {
         const {data} = await axiosInstance.get(`/menus/${id}`);
-        return data.data;
+        return data;
     }
 
     const update = async (payload) => {
         const {data} = await axiosInstance.put('/menus', payload);
-        return data.data;
+        return data;
     }
 
     const deleteById = async (id) => {
         const {data} = await axiosInstance.delete(`/menus/${id}`);
-        return data.data;
+        return data;
     }
     const getRecommendable = async () => {
         const {data} = await axiosInstance.get(`/menus/recommended`);
-        return data.data;
+        return data;
     }
 
     return {

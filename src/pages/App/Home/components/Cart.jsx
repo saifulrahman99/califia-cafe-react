@@ -1,6 +1,7 @@
 import React from 'react';
 import {ShoppingBasket} from "lucide-react";
 import Ripples from "react-ripples";
+import {formatRupiah} from "@/utils/formatCurrency.js";
 
 const Cart = () => {
     return (
@@ -17,7 +18,7 @@ const Cart = () => {
                 <div
                     className="col flex items-center w-full bg-primary text-center px-4">
                         <span
-                            className="font-bold text-white text-lg drop-shadow-[2px_2px_0px_gray] select-none">Rp12.000</span>
+                            className="font-bold text-white text-lg drop-shadow-[2px_2px_0px_gray] select-none">{formatRupiah(45000)}</span>
                 </div>
             </Ripples>
         </div>

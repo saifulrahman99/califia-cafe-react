@@ -31,7 +31,7 @@ const MenuList = () => {
                 });
 
                 // bentuk data baru dari data awal
-                const menus = data.data.reduce((acc, menu) => {
+                const menus = data.data.data.reduce((acc, menu) => {
                     const category = menu.category.name; // Ambil kategori
                     if (!acc[category]) {
                         acc[category] = []; // Buat array baru jika belum ada kategori
