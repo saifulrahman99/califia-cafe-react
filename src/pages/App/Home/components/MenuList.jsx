@@ -1,0 +1,152 @@
+import React, {useEffect, useMemo, useState} from 'react';
+
+import {formatRupiah} from "@/utils/formatCurrency.js";
+import {replaceLocalhostWithServerHost} from "@/utils/repllaceHostLocalToHostServer.js";
+import MenuService from "@services/menuService.js";
+import Ripples from 'react-ripples'
+import NullMenuData from "@shared/components/Error/NullMenuData.jsx";
+import ScrollToTop from "@pages/App/Home/components/ScrollToTop.jsx";
+import {capitalizeWords} from "@/utils/capitalWords.js";
+
+const MenuList = () => {
+    const [menus, setMenus] = useState({});
+    const [type, setType] = useState('');
+    const [listType] = useState(['', 'food', 'snack', 'beverage']);
+    const menuService = useMemo(() => MenuService(), []);
+
+    const handleTypeChange = (value) => {
+        setType(value);
+    }
+
+    const isEmptyObject = (obj) => {
+        return Object.keys(obj).length === 0;
+    };
+
+    useEffect(() => {
+        const getMenu = async () => {
+            try {
+                const data = await menuService.getAll({
+                    type: type,
+                    sortBy: 'type'
+                });
+
+                // bentuk data baru dari data awal
+                const menus = data.data.reduce((acc, menu) => {
+                    const category = menu.category.name; // Ambil kategori
+                    if (!acc[category]) {
+                        acc[category] = []; // Buat array baru jika belum ada kategori
+                    }
+                    acc[category].push(menu); // Masukkan menu ke kategori
+                    return acc;
+                }, {});
+
+                // sorting kategori by tipe menu
+                const typeOrder = ["food", "snack", "beverage"];
+                const sortMenuByType = (menu) => {
+                    return Object.fromEntries(
+                        Object.entries(menu).sort(([keyA, itemsA], [keyB, itemsB]) => {
+                            const typeA = typeOrder.indexOf(itemsA[0]?.type);
+                            const typeB = typeOrder.indexOf(itemsB[0]?.type);
+                            return typeA - typeB;
+                        })
+                    );
+                };
+
+                // urutkan nama menu secara asc per kategori
+                Object.keys(menus).forEach(category => {
+                    menus[category].sort((a, b) => a.name.localeCompare(b.name));
+                });
+                setMenus(sortMenuByType(menus));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getMenu();
+    }, [menuService, type]);
+
+    return (
+        <div className="px-4 pb-20">
+
+            <ScrollToTop/>
+
+            <nav className="my-3 grid grid-cols-4 gap-2 w-full border-b border-slate-200 mb-6" aria-label="Tabs">
+                {
+                    listType.map((item, index) => {
+                        return (
+                            <Ripples
+                                key={index}
+                                className={`cursor-pointer select-none shrink-0 flex justify-center rounded-t-md py-2 font-medium border-b-3 ${item === type ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}`}
+                                aria-current="page"
+                                onClick={() => handleTypeChange(item)}
+                                style={{textTransform: "capitalize"}}
+                            >
+                                {item !== '' ? capitalizeWords(`${item}s`) : 'All'}
+                            </Ripples>
+                        )
+                    })
+                }
+            </nav>
+
+            <div className="grid grid-cols-2 gap-4 select-none">
+                {
+                    isEmptyObject(menus) ?
+                        <NullMenuData/>
+                        :
+                        // munculkan data menu
+                        Object.keys(menus).map((category) => {
+                                return (
+                                    <>
+                                        <div
+                                            id={category}
+                                            className="font-semibold text-lg col-span-2 inline-flex items-center w-full after:content-[''] after:flex-1 after:border-b after:border-gray-200 after:ml-2"
+                                        >
+                                            {category}
+                                        </div>
+
+                                        {menus[category].map((menu) => {
+                                            let realPrice = menu.discount != null ? menu.price - menu.discount.amount : menu.price;
+                                            return (
+                                                <Ripples>
+                                                    <div key={menu.id}
+                                                         className="col border border-slate-200 rounded-lg overflow-hidden w-full">
+                                                        <div className="w-full aspect-square bg-slate-50">
+                                                            <img src={replaceLocalhostWithServerHost(menu.image)}
+                                                                 alt={menu.name}
+                                                                 className="w-full aspect-square select-none"/>
+                                                        </div>
+
+                                                        <div className="body py-2 px-3">
+                                                            <div
+                                                                className="text-lg text-slate-700 font-medium mb-2"
+                                                                style={{textTransform: "capitalize"}}>{menu.name}</div>
+                                                            {menu.discount != null ?
+                                                                <>
+                                                                        <span
+                                                                            className="text-sm inline-block line-through me-1 text-slate-600">{formatRupiah(menu.price)}</span>
+                                                                    <span
+                                                                        className="text-xs text-white bg-red-400 rounded-md p-1 px-2 font-medium">- {formatRupiah(menu.discount.amount)}</span>
+                                                                    <span
+                                                                        className="text-lg font-bold text-amber-500 block my-1">{formatRupiah(realPrice)}</span>
+                                                                </>
+                                                                :
+                                                                <>
+                                                                        <span
+                                                                            className="text-lg font-bold text-amber-500 block my-1">{formatRupiah(realPrice)}</span>
+                                                                </>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </Ripples>
+                                            )
+                                        })}
+                                    </>
+                                )
+                            }
+                        )
+                }
+            </div>
+        </div>
+    );
+};
+
+export default MenuList;

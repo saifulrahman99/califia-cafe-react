@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+.bg-primary {
+    background-color: #dcc4a4;
+}
+.text-primary {
+    color: #dcc4a4;
+}
+.border-primary {
+    border-color: #dcc4a4;
+}
+.text-slate-20{
+    color: oklch(.551 .027 264.364);
+}
+.mb-minus-1{
+    margin-bottom: -1rem;
+}
+.top-minus-1{
+    top: -1.5rem;
+}
