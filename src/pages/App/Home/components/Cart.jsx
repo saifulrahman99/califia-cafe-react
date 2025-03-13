@@ -6,7 +6,7 @@ import {formatRupiah} from "@/utils/formatCurrency.js";
 const Cart = () => {
     return (
         <div className="fixed z-1 -bottom-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer flex justify-center items-center">
-            <Ripples className="rounded-lg shadow overflow-hidden">
+            <Ripples className="rounded-lg shadow-2xl shadow-slate-700 overflow-hidden">
                 <div className="col bg-white p-3">
                     <div className="realtive w-full">
                         <div

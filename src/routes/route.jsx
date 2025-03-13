@@ -3,6 +3,8 @@ import Home from "@pages/App/Home/Home.jsx";
 import NotFound from "@shared/components/Error/NotFound.jsx";
 import AppLayout from "@/layout/AppLayout.jsx";
 import Search from "@pages/App/Search/Search.jsx";
+import DetailMenu from "@pages/App/Detail/DetailMenu.jsx";
+import AdminLayout from "@/layout/AdminLayout.jsx";
 
 const router = createBrowserRouter([
     {
@@ -20,9 +22,20 @@ const router = createBrowserRouter([
             {
                 path: "/search",
                 element: <Search/>
+            },
+            {
+                path: "/menu/:id",
+                element: <DetailMenu/>
             }
         ]
     },
+    {
+        path: "/admin",
+        element: <AdminLayout/>,
+        children:[
+
+        ]
+    }
 ]);
 
 export default router;

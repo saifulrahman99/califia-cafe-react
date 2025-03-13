@@ -33,10 +33,10 @@ function Home() {
     return (
         <>
             <div
-                className={`header fixed w-full max-w-md md:max-w-lg top-7 left-1/2 transform -translate-x-1/2 -translate-y-1/2 py-2 px-4 z-1 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
+                className={`header fixed w-full max-w-md md:max-w-lg top-7 left-1/2 transform -translate-x-1/2 -translate-y-1/2 py-2 px-4 z-5 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
             >
                 <div className="float-end">
-                    <Link to={"/search"}>
+                    <Link to={"/search"} className="outline-none">
                         <Ripples className="bg-white p-2 rounded-full hover:cursor-pointer inline me-3">
                             <Search strokeWidth={1} size={25}
                                     className="search-button"/>

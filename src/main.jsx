@@ -7,5 +7,5 @@ import router from "@/routes/route";
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <RouterProvider router={router}/>
-    </StrictMode>,
+    </StrictMode>
 )
