@@ -4,7 +4,8 @@ import NotFound from "@shared/components/Error/NotFound.jsx";
 import AppLayout from "@/layout/AppLayout.jsx";
 import Search from "@pages/App/Search/Search.jsx";
 import DetailMenu from "@pages/App/Detail/DetailMenu.jsx";
-import AdminLayout from "@/layout/AdminLayout.jsx";
+// import AdminLayout from "@/layout/AdminLayout.jsx";
+import Cart from "@pages/App/Cart/Cart.jsx";
 
 const router = createBrowserRouter([
     {
@@ -15,25 +16,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <AppLayout/>,
         children: [
-            {
-                index: true,
-                element: <Home/>
-            },
-            {
-                path: "/search",
-                element: <Search/>
-            },
-            {
-                path: "/menu/:id",
-                element: <DetailMenu/>
-            }
-        ]
-    },
-    {
-        path: "/admin",
-        element: <AdminLayout/>,
-        children:[
-
+            {index: true, element: <Home/>},
+            {path: "search", element: <Search/>},
+            {path: "menu/:id", element: <DetailMenu/>},
+            {path: "cart", element: <Cart/>}
         ]
     }
 ]);

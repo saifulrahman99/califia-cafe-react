@@ -6,31 +6,31 @@ import {formatRupiah} from "@/utils/formatCurrency.js";
 import {replaceLocalhostWithServerHost} from "@/utils/repllaceHostLocalToHostServer.js";
 import Ripples from "react-ripples";
 import {MyContext} from "@/MyContext.jsx";
-import SkeletonLoadingSearch from "@pages/App/Search/components/SkeletonLoadingSearch.jsx";
+import LoadingSearchSkeleton from "@pages/App/Search/components/LoadingSearchSkeleton.jsx";
+import {Link} from "react-router-dom";
 
 const SearchResult = ({search}) => {
     const {isLoading, setIsLoading} = useContext(MyContext);
     const [recommendMenus, setRecommendMenus] = useState([]);
     const menuService = useMemo(() => MenuService(), []);
 
-
     useEffect(() => {
         const getRecommendMenus = async () => {
-            setIsLoading(true);
+            setIsLoading(!isLoading);
             try {
                 const data = (search === "") ? await menuService.getRecommendable() : await menuService.getAll({q: search});
                 setRecommendMenus(data.data.data);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error);
             }
-            setIsLoading(false);
         }
         getRecommendMenus();
     }, [menuService, search]);
     return (
         <>
-            {isLoading ? <SkeletonLoadingSearch/> :
-                <div className="p-5 pt-2 mt-20 w-full mb-15 select-none">
+            {isLoading ? <LoadingSearchSkeleton/> :
+                <div className="p-5 pt-4 mt-18 w-full pb-15 select-none">
                     {search === "" ? <span className="font-semibold text-lg">Menu Rekomendasi</span> : null}
                     {
                         recommendMenus.length < 1 ?
@@ -42,39 +42,48 @@ const SearchResult = ({search}) => {
                                         let realPrice = menu.discount != null ? menu.price - menu.discount.amount : menu.price;
                                         return (
                                             <div key={index}
-                                                 className={`w-full rounded-lg py-2 flex border-b border-slate-200`}
+                                                 className={`w-full py-2 border-b border-slate-200 cursor-pointer`}
                                             >
-                                                <Ripples className="rounded-lg py-2">
-                                                    <div
-                                                        className="img min-w-10 max-w-25 bg-slate-50 rounded-lg overflow-hidden">
-                                                        <img src={replaceLocalhostWithServerHost(menu.image)}
-                                                             alt={menu.name}
-                                                             className="w-full aspect-square"/>
-                                                    </div>
-                                                    <div className="body ms-4 relative w-md">
-                                                <span
-                                                    className="font-semibold text-lg">{capitalizeWords(menu.name)}</span>
-                                                        <div className="absolute bottom-0 left-0 w-70 md:w-90">
-                                                            {
-                                                                menu.discount != null ?
-                                                                    <>
-                                                                 <span
-                                                                     className="text-sm inline line-through me-1 text-slate-600">{formatRupiah(menu.price)}</span>
-                                                                        <span
-                                                                            className="text-xs text-white bg-red-400 rounded-md p-0.5 px-2 font-medium">- {formatRupiah(menu.discount.amount)}</span>
-                                                                        <span
-                                                                            className="font-semibold text-amber-500 block">{formatRupiah(realPrice)}</span>
-                                                                    </>
-                                                                    :
-                                                                    <>
-                                                                <span
-                                                                    className="font-semibold text-amber-500">{formatRupiah(menu.price)}</span>
-                                                                    </>
-                                                            }
+                                                <Ripples className="rounded-lg w-full">
+                                                    <Link to={`/menu/${menu.id}`} className="w-full py-2 flex">
+                                                        <div
+                                                            className=" img min-w-10 max-w-25 bg-slate-50 rounded-lg
+                                                      overflow-hidden">
+                                                            <img src={replaceLocalhostWithServerHost(menu.image)}
+                                                                 alt={menu.name}
+                                                                 className=" w-full aspect-square"/>
                                                         </div>
-                                                    </div>
+                                                        <div
+                                                            className=" body ms-4 w-max-md text-wrap flex flex-col
+                                                      justify-between"
+                                                            style={{flex: 1}}
+                                                        >
+                                                            <span
+                                                                className=" font-semibold text-lg">{capitalizeWords(menu.name)}</span>
+                                                            <div className=" price">
+                                                                {
+                                                                    menu.discount != null ?
+                                                                        <>
+                                                                 <span
+                                                                     className=" text-sm inline line-through me-1
+                                                      text-slate-600">{formatRupiah(menu.price)}</span>
+                                                                            <span
+                                                                                className=" text-xs text-white
+                                                      bg-red-400 rounded-md p-0.5 px-2 font-medium">- {formatRupiah(menu.discount.amount)}</span>
+                                                                            <span
+                                                                                className=" font-semibold text-amber-500
+                                                      block">{formatRupiah(realPrice)}</span>
+                                                                        </>
+                                                                        :
+                                                                        <>
+                                                                <span
+                                                                    className=" font-semibold text-amber-500">{formatRupiah(menu.price)}</span>
+                                                                        </>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </Link>
                                                 </Ripples>
-
                                             </div>
                                         )
                                     })

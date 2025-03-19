@@ -1,19 +1,16 @@
 import React from 'react';
-import {Outlet} from "react-router-dom";
-import Cart from "@pages/App/Home/components/Cart.jsx";
-import {MyProvider} from "@/MyContext.jsx";
+import {Outlet, Link} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
 
 const AppLayout = () => {
     return (
-        <>
+        <div className="AppLayout bg-neutral-50">
             <div
                 className="w-full max-w-md md:max-w-lg mx-auto border border-t-0 border-b-0 border-slate-200 bg-white overflow-visible min-h-screen">
-                <MyProvider>
-                    <Outlet/>
-                </MyProvider>
-                <Cart/>
+                <Outlet/>
             </div>
-        </>
+            <ToastContainer/>
+        </div>
     );
 };
 

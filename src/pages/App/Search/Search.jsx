@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {SearchIcon, Undo2} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import SearchResult from "@pages/App/Search/components/SearchResult.jsx";
+import Cart from "@shared/components/Cart/Cart.jsx";
 
 const Search = () => {
     const navigate = useNavigate();
@@ -12,13 +13,14 @@ const Search = () => {
     }
     return (
         <>
+            <Cart/>
             <div
-                className="header fixed w-full max-w-md md:max-w-lg py-4 px-4 z-1 bg-white shadow flex items-center top-9 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="header fixed w-full max-w-md md:max-w-lg py-2 px-4 z-1 bg-white shadow flex items-center top-7.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
                 <div
                     onClick={() => navigate("/")}
                     className="p-1 me-3 cursor-pointer hover:bg-slate-200 rounded-full">
-                    <Undo2 size={25}/>
+                    <Undo2 size={25} strokeWidth={1.2}/>
                 </div>
                 <div className="relative w-full">
                     <span className="absolute inset-y-0 start-0 grid w-10 place-content-center">
@@ -29,7 +31,7 @@ const Search = () => {
                         type="text"
                         id="Search"
                         placeholder="Search for..."
-                        className="w-full rounded-md border-primary border-2 py-2.5 ps-10 shadow-xs sm:text-sm focus:outline-none"
+                        className="w-full rounded-md border-primary border-2 py-2 ps-10 shadow-xs sm:text-sm focus:outline-none"
                     />
 
                 </div>

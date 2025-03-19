@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SkeletonLoading = () => {
+const LoadingSkeleton = () => {
     return (
         <>
             <div
@@ -27,4 +27,4 @@ const SkeletonLoading = () => {
     );
 };
 
-export default SkeletonLoading;
+export default LoadingSkeleton;

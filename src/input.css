@@ -3,18 +3,39 @@
 .bg-primary {
     background-color: #dcc4a4;
 }
+
+.btn-primary:hover {
+    background-color: #d9bf9a !important;
+}
+
+.bg-primary-dark {
+    background-color: #d9bf9a !important;
+}
+
 .text-primary {
     color: #dcc4a4;
 }
+
 .border-primary {
     border-color: #dcc4a4;
 }
-.text-slate-20{
+
+.text-slate-20 {
     color: oklch(.551 .027 264.364);
 }
-.mb-minus-1{
+
+.mb-minus-1 {
     margin-bottom: -1rem;
 }
-.top-minus-1{
+
+.top-minus-1 {
     top: -1.5rem;
+}
+
+.custom-toast {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 99;
 }

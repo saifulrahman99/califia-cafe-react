@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SkeletonLoadingSearch = () => {
+const LoadingSearchSkeleton = () => {
     return (
         <div className="pt-20 px-6 min-h-screen">
             <span className="h-4 w-1/2 block bg-slate-200 rounded-lg mt-3"></span>
@@ -30,4 +30,4 @@ const SkeletonLoadingSearch = () => {
     );
 };
 
-export default SkeletonLoadingSearch;
+export default LoadingSearchSkeleton;

@@ -1,18 +1,28 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {ReceiptText, Search, Utensils} from "lucide-react";
 import MenuList from "@pages/App/Home/components/MenuList.jsx";
 import Ripples from 'react-ripples'
-import {Link, useSearchParams} from "react-router-dom";
+import {useSearchParams, Link} from "react-router-dom";
+import Cart from "@shared/components/Cart/Cart.jsx";
+import {MyContext} from "@/MyContext.jsx";
 
 function Home() {
+    const {cart} = useContext(MyContext);
     const [orderType, setOrderType] = useState("DI");
-    const [searchParams] = useSearchParams();
-    const table = searchParams.get("t");
     const [scrolling, setScrolling] = useState(false);
+    const [searchParams] = useSearchParams();
+
+    const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber"));
 
     const handleOrderTypeChange = (e) => {
         setOrderType(e.target.value);
     }
+
+    useEffect(() => {
+        const tableNum = searchParams.get("t");
+        if (tableNum) localStorage.setItem("tableNumber", tableNum);
+        setTableNumber(localStorage.getItem("tableNumber"));
+    }, [searchParams]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -32,16 +42,17 @@ function Home() {
 
     return (
         <>
+            {(cart.length > 0) && <Cart/>}
             <div
                 className={`header fixed w-full max-w-md md:max-w-lg top-7 left-1/2 transform -translate-x-1/2 -translate-y-1/2 py-2 px-4 z-5 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
             >
                 <div className="float-end">
-                    <Link to={"/search"} className="outline-none">
-                        <Ripples className="bg-white p-2 rounded-full hover:cursor-pointer inline me-3">
+                    <Ripples className="bg-white p-2 rounded-full hover:cursor-pointer inline me-3">
+                        <Link to={"/search"} className="outline-none">
                             <Search strokeWidth={1} size={25}
                                     className="search-button"/>
-                        </Ripples>
-                    </Link>
+                        </Link>
+                    </Ripples>
                     <Ripples className="bg-white p-2 rounded-full hover:cursor-pointer inline">
                         <ReceiptText strokeWidth={1} size={25}
                                      className="invoice-button"/>
@@ -85,7 +96,7 @@ function Home() {
                                 {orderType === "DI" ? "Makan di Tempat" : "Dibawa Pulang"}
                             </span>
                         <div
-                            className="float-right font-bold text-md">{((table != null && table !== '') && orderType !== "TA") && `Meja ${table}`}</div>
+                            className="float-right font-bold text-md">{((tableNumber !== "null" && tableNumber != null) && orderType !== "TA") && `Meja ${tableNumber}`}</div>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,8 @@ import NullMenuData from "@shared/components/Error/NullMenuData.jsx";
 import ScrollToTop from "@pages/App/Home/components/ScrollToTop.jsx";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {MyContext} from "@/MyContext.jsx";
-import SkeletonLoading from "@pages/App/Home/components/SkeletonLoading.jsx";
+import LoadingSkeleton from "@pages/App/Home/components/LoadingSkeleton.jsx";
+import {Link} from "react-router-dom";
 
 const MenuList = () => {
     const {isLoading, setIsLoading} = useContext(MyContext);
@@ -28,7 +29,7 @@ const MenuList = () => {
 
     useEffect(() => {
         const getMenu = async () => {
-            setIsLoading(true); // activate loading
+            setIsLoading(!isLoading); // activate loading
             try {
                 const data = await menuService.getAll({
                     type: type,
@@ -62,16 +63,16 @@ const MenuList = () => {
                     menus[category].sort((a, b) => a.name.localeCompare(b.name));
                 });
                 setMenus(sortMenuByType(menus));
+                setIsLoading(false); // deactivated loading
             } catch (error) {
                 console.log(error);
             }
-            setIsLoading(false); // deactivated loading
         };
         getMenu();
     }, [menuService, type]);
 
     return (
-        <div className="pb-20">
+        <div className="pb-24">
             <ScrollToTop/>
             <nav
                 style={{marginLeft: "0.5px"}}
@@ -98,7 +99,7 @@ const MenuList = () => {
                 {
                     isLoading ? (
                             <>
-                                <SkeletonLoading/>
+                                <LoadingSkeleton/>
                             </>
                         ) :
                         isEmptyObject(menus) ?
@@ -119,35 +120,36 @@ const MenuList = () => {
                                                 let realPrice = menu.discount != null ? menu.price - menu.discount.amount : menu.price;
                                                 return (
                                                     <Ripples className="rounded-lg">
-                                                        <div key={menu.id}
-                                                             className="col border border-slate-200 rounded-lg overflow-hidden w-full">
-                                                            <div className="w-full aspect-square bg-slate-50">
-                                                                <img src={replaceLocalhostWithServerHost(menu.image)}
-                                                                     alt={menu.name}
-                                                                     className="w-full aspect-square select-none"/>
-                                                            </div>
+                                                        <Link to={`menu/${menu.id}`}>
+                                                            <div key={menu.id}
+                                                                 className="col border border-slate-200 rounded-lg overflow-hidden w-full">
+                                                                <div className="w-full aspect-square bg-slate-50">
+                                                                    <img src={replaceLocalhostWithServerHost(menu.image)}
+                                                                         alt={menu.name}
+                                                                         className="w-full aspect-square select-none"/>
+                                                                </div>
 
-                                                            <div className="body py-2 px-3">
-                                                                <div
-                                                                    className="text-lg text-slate-700 font-medium mb-2"
-                                                                    style={{textTransform: "capitalize"}}>{menu.name}</div>
-                                                                {menu.discount != null ?
-                                                                    <>
+                                                                <div className="body py-2 px-3">
+                                                                    <div
+                                                                        className="text-lg text-slate-700 font-medium mb-2">{capitalizeWords(menu.name)}</div>
+                                                                    {menu.discount != null ?
+                                                                        <>
                                                                         <span
                                                                             className="text-sm inline-block line-through me-1 text-slate-600">{formatRupiah(menu.price)}</span>
-                                                                        <span
-                                                                            className="text-xs text-white bg-red-400 rounded-md p-1 px-2 font-medium">- {formatRupiah(menu.discount.amount)}</span>
+                                                                            <span
+                                                                                className="text-xs text-white bg-red-400 rounded-md p-1 px-2 font-medium">- {formatRupiah(menu.discount.amount)}</span>
+                                                                            <span
+                                                                                className="text-lg font-bold text-amber-500 block my-1">{formatRupiah(realPrice)}</span>
+                                                                        </>
+                                                                        :
+                                                                        <>
                                                                         <span
                                                                             className="text-lg font-bold text-amber-500 block my-1">{formatRupiah(realPrice)}</span>
-                                                                    </>
-                                                                    :
-                                                                    <>
-                                                                        <span
-                                                                            className="text-lg font-bold text-amber-500 block my-1">{formatRupiah(realPrice)}</span>
-                                                                    </>
-                                                                }
+                                                                        </>
+                                                                    }
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </Link>
                                                     </Ripples>
                                                 )
                                             })}
