@@ -10,7 +10,7 @@ const Cart = () => {
     const {cart} = useContext(MyContext);
     return (
         <div
-            className="fixed z-1 -bottom-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer">
+            className="fixed z-50 -bottom-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer">
             <Ripples className="rounded-lg shadow-2xl shadow-slate-700 overflow-hidden">
                 <Link to="/cart" className="flex justify-center">
                     <div className="col bg-white p-3">
@@ -25,7 +25,7 @@ const Cart = () => {
                     <div
                         className="col flex items-center w-full bg-primary justify-center px-4 flex-1 min-w-30">
                         <span
-                            className="font-bold text-white text-lg drop-shadow-[2px_2px_0px_gray] select-none">{formatRupiah(calculateOrderTotalPrice(cart))}</span>
+                            className="font-bold text-white text-xl drop-shadow-[2px_2px_0px_gray] select-none">{formatRupiah(calculateOrderTotalPrice(cart))}</span>
                     </div>
                 </Link>
             </Ripples>

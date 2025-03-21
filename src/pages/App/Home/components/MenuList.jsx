@@ -63,7 +63,7 @@ const MenuList = () => {
                     menus[category].sort((a, b) => a.name.localeCompare(b.name));
                 });
                 setMenus(sortMenuByType(menus));
-                setIsLoading(false); // deactivated loading
+                setIsLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -111,7 +111,7 @@ const MenuList = () => {
                                         <>
                                             <div
                                                 id={category}
-                                                className="font-semibold text-lg col-span-2 inline-flex items-center w-full after:content-[''] after:flex-1 after:border-b after:border-gray-200 after:ml-2"
+                                                className="font-semibold text-xl col-span-2 inline-flex items-center w-full after:content-[''] after:flex-1 after:border-b after:border-gray-200 after:ml-2"
                                             >
                                                 {category}
                                             </div>
@@ -120,9 +120,10 @@ const MenuList = () => {
                                                 let realPrice = menu.discount != null ? menu.price - menu.discount.amount : menu.price;
                                                 return (
                                                     <Ripples className="rounded-lg">
-                                                        <Link to={`menu/${menu.id}`}>
+                                                        <Link to={`menu/${menu.id}`}
+                                                              className="border border-slate-200 rounded-lg overflow-hidden w-full">
                                                             <div key={menu.id}
-                                                                 className="col border border-slate-200 rounded-lg overflow-hidden w-full">
+                                                                 className="col">
                                                                 <div className="w-full aspect-square bg-slate-50">
                                                                     <img src={replaceLocalhostWithServerHost(menu.image)}
                                                                          alt={menu.name}

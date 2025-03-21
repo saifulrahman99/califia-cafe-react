@@ -19,10 +19,10 @@ const ScrollToTop = () => {
 
     return (
         <div
-            className={`fixed z-1 w-full ms-7 max-w-xs md:max-w-md bottom-20 transition-all overflow-hidden duration-500 ${isVisible ? 'max-h-full' : 'max-h-0'}`}>
+            className={`fixed z-1 w-full max-w-md md:max-w-lg bottom-20 transition-all overflow-hidden duration-500 ${isVisible ? 'max-h-full' : 'max-h-0'}`}>
             <button
                 onClick={handleScrollToTop}
-                className="bg-primary rounded-full p-1 text-white font-semibold float-right shadow shadow-slate-400 m-1 cursor-pointer">
+                className="bg-primary rounded-full p-2 text-white font-semibold float-right shadow shadow-slate-400 m-1 cursor-pointer me-4">
                 <ChevronUp size={30}/>
             </button>
         </div>

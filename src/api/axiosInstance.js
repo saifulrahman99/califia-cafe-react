@@ -5,12 +5,12 @@ const axiosInstance = axios.create({
     baseURL: "/api", // Ganti dengan URL API
     headers: {
         Accept: "application/json",
+        "ngrok-skip-browser-warning": "true",
     },
 });
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        // console.log("Hitting API:", config.baseURL + config.url); // Log URL API yang di-hit
         const token = localStorage.getItem('token');
         if (token) {
             const {token} = JSON.parse(token);

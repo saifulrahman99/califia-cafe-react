@@ -1,10 +1,12 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {SearchIcon, Undo2} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import SearchResult from "@pages/App/Search/components/SearchResult.jsx";
 import Cart from "@shared/components/Cart/Cart.jsx";
+import {MyContext} from "@/MyContext.jsx";
 
 const Search = () => {
+    const {cart} = useContext(MyContext);
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
 
@@ -13,9 +15,8 @@ const Search = () => {
     }
     return (
         <>
-            <Cart/>
             <div
-                className="header fixed w-full max-w-md md:max-w-lg py-2 px-4 z-1 bg-white shadow flex items-center top-7.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="header fixed w-full max-w-md md:max-w-lg py-3 px-4 z-1 bg-white shadow flex items-center top-7.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
                 <div
                     onClick={() => navigate("/")}
@@ -36,7 +37,9 @@ const Search = () => {
 
                 </div>
             </div>
-
+            {
+                (cart.length > 0) && <Cart/>
+            }
             <SearchResult search={search}/>
         </>
     );

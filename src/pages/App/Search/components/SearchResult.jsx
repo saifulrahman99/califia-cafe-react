@@ -30,8 +30,8 @@ const SearchResult = ({search}) => {
     return (
         <>
             {isLoading ? <LoadingSearchSkeleton/> :
-                <div className="p-5 pt-4 mt-18 w-full pb-15 select-none">
-                    {search === "" ? <span className="font-semibold text-lg">Menu Rekomendasi</span> : null}
+                <div className="p-5 pt-22 w-full pb-15 select-none">
+                    {search === "" ? <span className="font-semibold text-xl">Menu Rekomendasi</span> : null}
                     {
                         recommendMenus.length < 1 ?
                             <NullMenuData/>
@@ -47,11 +47,11 @@ const SearchResult = ({search}) => {
                                                 <Ripples className="rounded-lg w-full">
                                                     <Link to={`/menu/${menu.id}`} className="w-full py-2 flex">
                                                         <div
-                                                            className=" img min-w-10 max-w-25 bg-slate-50 rounded-lg
+                                                            className="img min-w-10 max-w-25 bg-slate-50 rounded-lg
                                                       overflow-hidden">
                                                             <img src={replaceLocalhostWithServerHost(menu.image)}
                                                                  alt={menu.name}
-                                                                 className=" w-full aspect-square"/>
+                                                                 className="w-50 aspect-square"/>
                                                         </div>
                                                         <div
                                                             className=" body ms-4 w-max-md text-wrap flex flex-col

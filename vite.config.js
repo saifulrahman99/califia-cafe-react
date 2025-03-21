@@ -16,18 +16,18 @@ export default defineConfig({
         }
     },
     server: {
-        hostname: "0.0.0.0",
-        allowedHosts: ["d46d-36-73-179-90.ngrok-free.app"],
+        host: "0.0.0.0", // Buka akses agar bisa diakses dari jaringan lain
+        port: 5173, // Port default Vite
+        strictPort: true, // Pastikan Vite tidak mencari port lain
+        cors: true, // Aktifkan CORS agar bisa diakses dari domain lain
+        allowedHosts: ["cb99-36-74-208-150.ngrok-free.app"],
         proxy: {
-            '/api': {
-                target: 'http://localhost:8000',
-                // target: 'https://dfbb-36-74-220-158.ngrok-free.app',
-                changeOrigin: true,
-                rewrite: (path) => path.replace('^/api/', ''),
-            }
-        }
-    },
-    optimizeDeps: {
-        force: true,
-    },
+            "/api": {
+                // target: "http://localhost:8000", // Backend Laravel lokal
+                target: "https://9b3c-36-74-208-150.ngrok-free.app", // Backend Laravel ngrok
+                changeOrigin: true, // Pastikan origin sesuai dengan target
+                // secure: false, // Nonaktifkan SSL verification jika perlu
+            },
+        },
+    }
 })

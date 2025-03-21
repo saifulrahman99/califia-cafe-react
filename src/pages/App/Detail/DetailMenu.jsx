@@ -8,7 +8,6 @@ import {formatRupiah} from "@/utils/formatCurrency.js";
 import ToppingService from "@services/toppingService.js";
 import {MyContext} from "@/MyContext.jsx";
 import DetailMenuSkeleton from "@pages/App/Detail/components/DetailMenuSkeleton.jsx";
-import {Bounce, Flip, Slide, toast} from "react-toastify";
 
 const DetailMenu = () => {
     const {id} = useParams();
@@ -24,29 +23,52 @@ const DetailMenu = () => {
     const [orderTotalPrice, setOrderTotalPrice] = useState(0);
     const [toppingCarts, setToppingCarts] = useState([]);
     const [note, setNote] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleAddToCart = () => {
-        addToCart(id, menu.name, menuQty, realPrice, note, toppingCarts);
+        addToCart({
+            menuId: id,
+            name: menu.name,
+            price: realPrice,
+            qty: menuQty,
+            note: note,
+            stock: menu.stock,
+            type: menu.type,
+            toppingEnabled: menu.topping_enabled
+        }, toppingCarts);
+        setIsOpen(!isOpen);
         showToast("success", "Berhasil Ditambahkan", 1000);
         setTimeout(() => navigate(-1), 1800);
     }
 
-    const handleModifyToppingCart = (id, qty, name, price) => {
-        const toppingCart = toppingCarts.find((item) => item.id === id);
+    const handleModifyToppingCart = (topping, qty) => {
+        const toppingCart = toppingCarts.find((item) => item.id === topping.id);
         // setOrderTotalPrice();
         if (toppingCart != null) {
             // remove topping
             if (qty < 1) {
-                setToppingCarts(toppingCarts.filter(item => item.id !== id));
+                setToppingCarts(toppingCarts.filter(item => item.id !== topping.id));
                 return
             }
             // update topping
             setToppingCarts(toppingCarts.map((item) => {
-                return item.id === id ? {...item, name: name, qty: qty, price: price} : item
+                return item.id === topping.id ? {
+                    ...item,
+                    name: topping.name,
+                    qty: qty,
+                    price: topping.price,
+                    stock: topping.stock
+                } : item
             }));
         } else {
             // add topping
-            setToppingCarts([...toppingCarts, {id: id, name: name, qty: qty, price: price}]);
+            setToppingCarts([...toppingCarts, {
+                id: topping.id,
+                name: topping.name,
+                qty: qty,
+                price: topping.price,
+                stock: topping.stock
+            }]);
         }
     }
 
@@ -88,10 +110,9 @@ const DetailMenu = () => {
 
         const getToppings = async () => {
             try {
-                const data = await toppingService.getAll({
-                    type: menu.type
-                });
-                setToppings(data.data);
+                const data = await toppingService.getAll();
+                const type = (menu.type !== "beverage") ? ["food", "snack"] : ["beverage"];
+                setToppings(data.data.filter(item => type.includes(item.type)));
             } catch (e) {
                 console.log(e.message);
             }
@@ -102,19 +123,20 @@ const DetailMenu = () => {
 
     return (
         <>
+            {isOpen && <div className="bg-black/30 fixed inset-0 z-2 w-full max-w-md md:max-w-lg m-auto"/>}
             <div
                 className={`header fixed w-full max-w-md md:max-w-lg py-2 px-4 z-1 flex items-center top-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
             >
                 <div
                     onClick={() => navigate(-1)}
-                    className={`p-1 me-3 cursor-pointer rounded-full bg-white ${scrolling ? 'border border-slate-200' : 'border-0'}`}>
+                    className={`p-1 me-3 cursor-pointer rounded-full bg-white`}>
                     <Undo2 size={25} strokeWidth={1.2}/>
                 </div>
             </div>
 
             {isLoading ? <DetailMenuSkeleton/> :
                 <>
-                    <div className="content pb-30 select-none">
+                    <div className="content pb-40 select-none">
                         <div className="image aspect-video overflow-hidden flex flex-col justify-center items-center">
                             <img src={replaceLocalhostWithServerHost(menu.image)} alt={menu.name} className="w-full"/>
                         </div>
@@ -166,7 +188,7 @@ const DetailMenu = () => {
                                                         <div className="flex items-center gap-1">
                                                             <button
                                                                 onClick={() => {
-                                                                    handleModifyToppingCart(topping.id, itemQty - 1, topping.name, topping.price)
+                                                                    handleModifyToppingCart(topping, itemQty - 1)
                                                                     setOrderTotalPrice(orderTotalPrice + (-1 * topping.price))
                                                                 }}
                                                                 type="button"
@@ -184,7 +206,7 @@ const DetailMenu = () => {
                                                             />
                                                             <button
                                                                 onClick={() => {
-                                                                    handleModifyToppingCart(topping.id, itemQty + 1, topping.name, topping.price)
+                                                                    handleModifyToppingCart(topping, itemQty + 1)
                                                                     setOrderTotalPrice(orderTotalPrice + (1 * topping.price))
                                                                 }}
                                                                 type="button"
@@ -197,7 +219,7 @@ const DetailMenu = () => {
                                                 ) : (
                                                     <button
                                                         onClick={() => {
-                                                            handleModifyToppingCart(topping.id, itemQty + 1, topping.name, topping.price)
+                                                            handleModifyToppingCart(topping, itemQty + 1)
                                                             setOrderTotalPrice(orderTotalPrice + (1 * topping.price))
                                                         }}
                                                         className="px-2 py-1 btn-primary bg-primary rounded-lg text-white cursor-pointer shadow flex items-center text-sm">
@@ -214,48 +236,45 @@ const DetailMenu = () => {
                     </div>
 
                     <div
-                        className="header fixed w-full max-w-md md:max-w-lg pt-3 pb-8 px-4 z-1 bg-white shadow border border-t-slate-200 border-x-0 border-b-0 flex items-center -bottom-14.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-t-lg"
+                        className="header fixed w-full max-w-md md:max-w-lg pb-3 pt-2 px-4 z-1 bg-white border border-t-slate-200 border-x-0 border-b-0 flex items-center flex-wrap -bottom-14.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-t-2xl shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.15)]"
                     >
-                        <div className="text-start text-slate-700">
-                            <label className="block text-center font-semibold">Qty</label>
-                            <div className="qty">
-                                <div className="flex items-center gap-1">
-                                    <button
-                                        onClick={() => handleModifyQtyMenu(menuQty - 1)}
-                                        disabled={menuQty < 2}
-                                        type="button"
-                                        className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty > 1 ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
-                                        <MinusIcon strokeWidth={1.5} size={16}/>
-                                    </button>
+                        <div className="qty text-slate-700 w-1/2 mt-2 mb-4">
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={() => handleModifyQtyMenu(menuQty - 1)}
+                                    disabled={menuQty < 2}
+                                    type="button"
+                                    className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty > 1 ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
+                                    <MinusIcon strokeWidth={1.5} size={16}/>
+                                </button>
 
-                                    <input
-                                        type="number"
-                                        id="Quantity"
-                                        value={menuQty}
-                                        min="1"
-                                        className="h-10 w-10 text-slate-500 border-gray-200 mx-2 text-center sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none focus:outline-none cursor-default select-none"
-                                        readOnly={true}
-                                    />
-                                    <button
-                                        onClick={() => handleModifyQtyMenu(menuQty + 1)}
-                                        disabled={menuQty === menu.stock}
-                                        type="button"
-                                        className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty < menu.stock ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
-                                        <PlusIcon strokeWidth={1.5} size={16}/>
-                                    </button>
+                                <input
+                                    type="number"
+                                    id="Quantity"
+                                    value={menuQty}
+                                    min="1"
+                                    className="h-10 w-5 text-slate-500 border-gray-200 mx-2 text-center font-semibold [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none focus:outline-none cursor-default select-none"
+                                    readOnly={true}
+                                />
+                                <button
+                                    onClick={() => handleModifyQtyMenu(menuQty + 1)}
+                                    disabled={menuQty >= menu.stock}
+                                    type="button"
+                                    className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty < menu.stock ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
+                                    <PlusIcon strokeWidth={1.5} size={16}/>
+                                </button>
 
-                                </div>
                             </div>
                         </div>
-                        <div className="block w-full ms-4">
-                    <span
-                        className="inline-block font-bold mb-2 text-xl text-end w-full text-slate-600"> Total: {formatRupiah(orderTotalPrice)}</span>
-                            <button
-                                onClick={handleAddToCart}
-                                className="btn-primary w-full bg-primary font-semibold text-white py-1 rounded-md cursor-pointer shadow text-lg">Tambah
-                                Pesanan
-                            </button>
+                        <div className="block w-1/2">
+                            <span
+                                className="inline-block font-bold mb-2 text-xl text-end w-full text-slate-600"> Total: {formatRupiah(orderTotalPrice)}</span>
                         </div>
+                        <button
+                            onClick={handleAddToCart}
+                            className="btn-primary w-full bg-primary font-semibold text-white py-2 rounded-md cursor-pointer shadow text-lg">Tambah
+                            Pesanan
+                        </button>
                     </div>
                 </>
             }

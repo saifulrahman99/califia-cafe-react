@@ -1,4 +1,4 @@
-import {createContext, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {Flip, toast} from "react-toastify";
 
@@ -8,27 +8,43 @@ export const MyProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState([]);
 
-    const addToCart = (menuId, name, price, qty, note = null, toppings = []) => {
+    const addToCart = (menu, toppings = []) => {
         setCart(prevCart => {
             const existingItem = prevCart.find(
                 item =>
-                    item.id === menuId &&
+                    item.menuId === menu.menuId && // Ubah id ke menuId agar id tetap unik
                     JSON.stringify(item.toppings) === JSON.stringify(toppings) &&
-                    item.note === note // Perbedaan di note juga diperhitungkan
+                    item.note === menu.note
             );
 
             if (existingItem) {
                 return prevCart.map(item =>
-                    item.id === menuId &&
+                    item.menuId === menu.menuId &&
                     JSON.stringify(item.toppings) === JSON.stringify(toppings) &&
-                    item.note === note
-                        ? {...item, qty: item.qty + qty}
+                    item.note === menu.note
+                        ? {...item, qty: item.qty + menu.qty}
                         : item
                 );
             }
-            return [...prevCart, {id: menuId, name, qty, price, toppings, note}];
+
+            // Generate id baru sebagai angka urutan
+            const newId = prevCart.length > 0 ? Math.max(...prevCart.map(i => i.id)) + 1 : 1;
+
+            return [...prevCart, {
+                id: newId,
+                menuId: menu.menuId,
+                name: menu.name,
+                qty: menu.qty,
+                price: menu.price,
+                note: menu.note,
+                stock: menu.stock,
+                type: menu.type,
+                toppingEnabled: menu.toppingEnabled,
+                toppings
+            }];
         });
     };
+
 
     const updateMenuQty = (cartId, newQty) => {
         setCart(prevCart =>
@@ -67,6 +83,22 @@ export const MyProvider = ({children}) => {
         );
     };
 
+    const addDirectToppingToMenu = (cartId, topping) => {
+        setCart(prevCart =>
+            prevCart.map(item =>
+                item.id === cartId
+                    ? {
+                        ...item,
+                        toppings: [
+                            ...item.toppings,
+                            {
+                                ...topping,
+                                qty: 1,
+                            }
+                        ]
+                    } : item
+            ))
+    }
     const removeFromCart = (cartId) => {
         setCart(prevCart => prevCart.filter(item => item.id !== cartId));
     };
@@ -100,6 +132,9 @@ export const MyProvider = ({children}) => {
         }
     }
 
+    useEffect(() => {
+        console.log(cart)
+    }, [cart])
     return (
         <MyContext.Provider value={{
             isLoading,
@@ -111,7 +146,8 @@ export const MyProvider = ({children}) => {
             removeFromCart,
             updateMenuQty,
             updateNote,
-            showToast
+            showToast,
+            addDirectToppingToMenu
         }}>
             {children}
         </MyContext.Provider>
