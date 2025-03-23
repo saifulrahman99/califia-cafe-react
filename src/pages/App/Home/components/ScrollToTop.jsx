@@ -5,13 +5,15 @@ const ScrollToTop = () => {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         const toggleVisibility = () => {
-            setIsVisible(window.scrollY > 800); // Tombol muncul setelah scroll 300px
+            setIsVisible(window.scrollY > 800);
         };
 
         window.addEventListener("scroll", toggleVisibility);
         return () => window.removeEventListener("scroll", toggleVisibility);
     }, []);
+
 
     const handleScrollToTop = () => {
         window.scrollTo({top: 370, behavior: "smooth"});

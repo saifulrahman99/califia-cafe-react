@@ -33,7 +33,8 @@ const MenuList = () => {
             try {
                 const data = await menuService.getAll({
                     type: type,
-                    sortBy: 'type'
+                    sortBy: 'type',
+                    all: true
                 });
 
                 // bentuk data baru dari data awal

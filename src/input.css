@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 .bg-primary {
-    background-color: #dcc4a4;
+    background-color: #d9bc92;
+    /*    background-color: #dcc4a4;*/
 }
 
 .btn-primary:hover {
-    background-color: #d9bc92 !important;
+    background-color: #ccab78 !important;
 }
 
 .bg-primary-dark {
@@ -13,7 +14,8 @@
 }
 
 .text-primary {
-    color: #dcc4a4;
+    color: #d9bc92;
+    /*color: #dcc4a4;*/
 }
 
 .border-primary {
@@ -42,23 +44,23 @@
 
 /* Atur scrollbar agar tipis */
 ::-webkit-scrollbar {
-  width: 6px; /* Lebar scrollbar vertikal */
-  height: 6px; /* Lebar scrollbar horizontal */
+    width: 6px; /* Lebar scrollbar vertikal */
+    height: 6px; /* Lebar scrollbar horizontal */
 }
 
 /* Warna background scrollbar */
 ::-webkit-scrollbar-track {
-  background: transparent; /* Bisa juga pakai rgba(0,0,0,0.1) untuk sedikit terlihat */
+    background: transparent; /* Bisa juga pakai rgba(0,0,0,0.1) untuk sedikit terlihat */
 }
 
 /* Warna dan bentuk thumb (bagian yang bisa digerakkan) */
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 100, 100, 0.5); /* Warna transparan seperti Android */
-  border-radius: 10px; /* Membuat ujung membulat */
+    background: rgba(100, 100, 100, 0.5); /* Warna transparan seperti Android */
+    border-radius: 10px; /* Membuat ujung membulat */
 }
 
 /* Hover effect */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 100, 100, 0.7); /* Warna lebih gelap saat dihover */
+    background: rgba(100, 100, 100, 0.7); /* Warna lebih gelap saat dihover */
 }
 

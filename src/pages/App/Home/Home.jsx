@@ -1,20 +1,36 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState, Fragment} from 'react';
 import {ReceiptText, Search, Utensils} from "lucide-react";
 import MenuList from "@pages/App/Home/components/MenuList.jsx";
 import Ripples from 'react-ripples'
 import {useSearchParams, Link} from "react-router-dom";
 import Cart from "@shared/components/Cart/Cart.jsx";
 import {MyContext} from "@/MyContext.jsx";
+import {BrowserMultiFormatReader} from "@zxing/browser";
+import {Dialog, Transition} from "@headlessui/react";
 
 function Home() {
-    const {cart} = useContext(MyContext);
-    const [orderType, setOrderType] = useState("DI");
-    const [scrolling, setScrolling] = useState(false);
     const [searchParams] = useSearchParams();
-
+    const {cart} = useContext(MyContext);
+    const [orderType, setOrderType] = useState("TA");
+    const [scrolling, setScrolling] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber"));
 
     const handleOrderTypeChange = (e) => {
+        if (e.target.value === "DI" && (localStorage.getItem("tableNumber") === null || searchParams.get("t") === "")) {
+            setIsOpen(true);
+            const codeReader = new BrowserMultiFormatReader();
+            codeReader.decodeFromVideoDevice(undefined, "video", (res, err) => {
+                if (res) {
+                    window.location.href = res.text; // Redirect ke link
+                }
+                if (err) console.error(err);
+            }).then(r => {
+                console.log(r);
+            });
+
+            return () => codeReader.reset();
+        }
         setOrderType(e.target.value);
     }
 
@@ -25,6 +41,7 @@ function Home() {
     }, [searchParams]);
 
     useEffect(() => {
+        setOrderType((localStorage.getItem("tableNumber") === null || searchParams.get("t") === "") ? "TA" : "DI");
         const handleScroll = () => {
             if (window.scrollY > 80) {
                 setScrolling(true); // Ubah warna jika scroll > 50px
@@ -85,8 +102,8 @@ function Home() {
                             onChange={handleOrderTypeChange}
                             className="border border-slate-300 text-slate-800 font-semibold px-5 py-1 rounded-lg text-xs hover:cursor-pointer focus:outline-none"
                         >
-                            <option value="DI">Dine-In</option>
                             <option value="TA">Take Away</option>
+                            <option value="DI">Dine-In</option>
                         </select>
                     </div>
                     <div className="w-full">
@@ -100,6 +117,47 @@ function Home() {
                     </div>
                 </div>
             </div>
+
+            <Transition appear show={isOpen} as={Fragment}>
+                <Dialog as="div"
+                        className="fixed inset-0 flex items-center justify-center z-50 max-w-md md:max-w-lg mx-auto select-none"
+                        onClose={() => setIsOpen(true)} unmount={false}>
+                    {/* Background overlay */}
+                    <Transition.Child
+                        as="div"
+                        className="absolute inset-0 z-0 bg-black/30 bg-opacity-50"
+                        enter="transition-opacity duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="transition-opacity duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    />
+
+                    {/* Modal Container */}
+                    <Transition.Child
+                        as="div"
+                        className="w-full px-8 max-w-md md:max-w-lg mx-auto"
+                        enter="transition-transform transition-opacity duration-300"
+                        enterFrom="opacity-0 scale-95"
+                        enterTo="opacity-100 scale-100"
+                        leave="transition-transform transition-opacity duration-200"
+                        leaveFrom="opacity-100 scale-100"
+                        leaveTo="opacity-0 scale-95"
+                    >
+                        <Dialog.Panel className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative z-1">
+                            {/* Title */}
+                            <Dialog.Title className="text-lg font-semibold text-gray-900">
+                                Scan QR
+                            </Dialog.Title>
+
+                            {/* Message */}
+                            <p className="my-2 text-gray-600">Silahkan Arahkan Kamera Ke Kode QR</p>
+                            <video id="video" className="w-full h-min-60"/>
+                        </Dialog.Panel>
+                    </Transition.Child>
+                </Dialog>
+            </Transition>
 
             <MenuList/>
         </>

@@ -123,9 +123,10 @@ const DetailMenu = () => {
 
     return (
         <>
-            {isOpen && <div className="bg-black/30 fixed inset-0 z-2 w-full max-w-md md:max-w-lg m-auto"/>}
             <div
-                className={`header fixed w-full max-w-md md:max-w-lg py-2 px-4 z-1 flex items-center top-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
+                className={`bg-black/30 fixed inset-0 z-0 w-full max-w-md md:max-w-lg m-auto transition-opacity duration-300 ${isOpen ? 'opacity-100 z-4' : 'opacity-0'}`}/>
+            <div
+                className={`header fixed w-full max-w-md md:max-w-lg py-2 px-4 z-2 flex items-center top-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
             >
                 <div
                     onClick={() => navigate(-1)}
@@ -136,7 +137,7 @@ const DetailMenu = () => {
 
             {isLoading ? <DetailMenuSkeleton/> :
                 <>
-                    <div className="content pb-40 select-none">
+                    <div className="content pb-40 select-none relative z-1">
                         <div className="image aspect-video overflow-hidden flex flex-col justify-center items-center">
                             <img src={replaceLocalhostWithServerHost(menu.image)} alt={menu.name} className="w-full"/>
                         </div>
@@ -236,7 +237,7 @@ const DetailMenu = () => {
                     </div>
 
                     <div
-                        className="header fixed w-full max-w-md md:max-w-lg pb-3 pt-2 px-4 z-1 bg-white border border-t-slate-200 border-x-0 border-b-0 flex items-center flex-wrap -bottom-14.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-t-2xl shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.15)]"
+                        className="header fixed w-full max-w-md md:max-w-lg pb-3 pt-2 px-4 z-1 bg-white border border-t-slate-200 border-x-0 border-b-0 flex items-center flex-wrap -bottom-16 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-t-2xl shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.15)]"
                     >
                         <div className="qty text-slate-700 w-1/2 mt-2 mb-4">
                             <div className="flex items-center gap-1">

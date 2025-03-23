@@ -20,11 +20,11 @@ export default defineConfig({
         port: 5173, // Port default Vite
         strictPort: true, // Pastikan Vite tidak mencari port lain
         cors: true, // Aktifkan CORS agar bisa diakses dari domain lain
-        allowedHosts: ["cb99-36-74-208-150.ngrok-free.app"],
+        allowedHosts: ["c033-36-73-178-6.ngrok-free.app"],
         proxy: {
             "/api": {
                 // target: "http://localhost:8000", // Backend Laravel lokal
-                target: "https://9b3c-36-74-208-150.ngrok-free.app", // Backend Laravel ngrok
+                target: "https://c89a-36-73-178-6.ngrok-free.app", // Backend Laravel ngrok
                 changeOrigin: true, // Pastikan origin sesuai dengan target
                 // secure: false, // Nonaktifkan SSL verification jika perlu
             },

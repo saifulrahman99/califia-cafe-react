@@ -45,7 +45,6 @@ export const MyProvider = ({children}) => {
         });
     };
 
-
     const updateMenuQty = (cartId, newQty) => {
         setCart(prevCart =>
             prevCart
@@ -81,6 +80,9 @@ export const MyProvider = ({children}) => {
                     : item
             )
         );
+        setTimeout(() => {
+            mergeCartItems();
+        }, 5000);
     };
 
     const addDirectToppingToMenu = (cartId, topping) => {
@@ -97,10 +99,35 @@ export const MyProvider = ({children}) => {
                             }
                         ]
                     } : item
-            ))
+            ));
+
+        setTimeout(() => {
+            mergeCartItems();
+        }, 5000);
     }
+
     const removeFromCart = (cartId) => {
         setCart(prevCart => prevCart.filter(item => item.id !== cartId));
+    };
+
+    const mergeCartItems = () => {
+        setCart(prevCart => {
+            const itemMap = new Map();
+
+            prevCart.forEach(item => {
+                const key = `${item.menuId}-${item.toppings}-${item.note || ''}`;
+
+                if (itemMap.has(key)) {
+                    // Jika sudah ada, tambahkan qty
+                    itemMap.get(key).qty += item.qty;
+                } else {
+                    // Jika belum ada, simpan di Map tanpa mengubah cartId
+                    itemMap.set(key, {...item});
+                }
+            });
+
+            return Array.from(itemMap.values());
+        });
     };
 
     const showToast = (type, message, duration) => {
@@ -147,7 +174,8 @@ export const MyProvider = ({children}) => {
             updateMenuQty,
             updateNote,
             showToast,
-            addDirectToppingToMenu
+            addDirectToppingToMenu,
+            mergeCartItems
         }}>
             {children}
         </MyContext.Provider>
