@@ -31,6 +31,7 @@ function Home() {
 
             return () => codeReader.reset();
         }
+        sessionStorage.setItem("orderType", e.target.value);
         setOrderType(e.target.value);
     }
 
@@ -42,8 +43,9 @@ function Home() {
 
     useEffect(() => {
         setOrderType((sessionStorage.getItem("tableNumber") === null || searchParams.get("t") === "") ? "TA" : "DI");
+        setOrderType(sessionStorage.getItem("orderType"));
         const handleScroll = () => {
-            if (window.scrollY > 80) {
+            if (window.scrollY > 60) {
                 setScrolling(true); // Ubah warna jika scroll > 50px
             } else {
                 setScrolling(false);
@@ -61,7 +63,7 @@ function Home() {
         <>
             {(cart.length > 0) && <Cart/>}
             <div
-                className={`header fixed w-full max-w-md md:max-w-lg top-7 left-1/2 transform -translate-x-1/2 -translate-y-1/2 py-2 px-4 z-5 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
+                className={`header fixed w-full max-w-md md:max-w-lg top-7 left-1/2 transform -translate-x-1/2 -translate-y-1/2 py-2 px-4 z-5 transition-all duration-150 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
             >
                 <div className="float-end">
                     <Ripples className="bg-white p-2 rounded-full hover:cursor-pointer inline me-3">

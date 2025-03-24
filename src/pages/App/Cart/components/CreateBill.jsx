@@ -8,6 +8,8 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import BillService from "@services/billService.js";
 import {useNavigate} from "react-router-dom";
 import {capitalizeWords} from "@/utils/capitalWords.js";
+import animationLoading from "@assets/lottie/loading.json";
+import Lottie from "lottie-react";
 
 // Schema Validasi Yup
 const schema = yup.object().shape({
@@ -29,7 +31,9 @@ const CreateBill = () => {
     const {
         cart,
         setCart,
-        showToast
+        showToast,
+        isLoading,
+        setIsLoading,
     } = useContext(MyContext);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -75,10 +79,11 @@ const CreateBill = () => {
     };
 
     const onSubmit = (data) => {
+        setIsOpen(!isOpen);
         const bill = {
             "customer_name": capitalizeWords(data.name),
             "phone_number": data.phone,
-            "table": "Meja " + sessionStorage.getItem("tableNumber"),
+            "table": sessionStorage.getItem("orderType") === "DI" ? "Meja " + sessionStorage.getItem("tableNumber") : null,
             "bill_details": cart.map((item) => {
                 return {
                     menu_id: item.menuId,
@@ -94,24 +99,35 @@ const CreateBill = () => {
             })
         }
         const createBill = async () => {
+            setIsLoading(!isLoading);
             try {
                 const data = await billService.create(bill);
                 addBillToInvoice(data.data.id);
+                if (data.status === 201) {
+                    setIsLoading(false);
+                    showToast("success", "Pesanan Berhasil Dibuat", 1000);
+                    setTimeout(() => setCart([]), 1800);
+                }
             } catch (err) {
                 console.log(err)
             }
         }
-        createBill().then(() => {
-            setIsOpen(!isOpen);
-            showToast("success", "Pesanan Berhasil Dibuat", 1000);
-            setTimeout(() => setCart([]), 1800);
-        });
+        createBill()
     };
 
     return (
         <>
             <div
-                className={`bg-black/30 fixed inset-0 z-0 w-full max-w-md md:max-w-lg m-auto transition-opacity duration-300 ${isOpen ? 'opacity-100 z-4' : 'opacity-0'}`}/>
+                className={`bg-black/30 fixed inset-0 flex justify-center items-center z-0 w-full max-w-md md:max-w-lg m-auto transition-opacity duration-300 ${isOpen ? 'opacity-100 z-4' : 'opacity-0'}`}>
+                <div
+                    className={`w-40 bg-white rounded-xl transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-0'}`}>
+                    <Lottie
+                        animationData={animationLoading}
+                        loop={true}
+                    />
+                    <span className="font-semibold block relative -top-10 text-center text-slate-700">Loading</span>
+                </div>
+            </div>
 
             <div className="pt-15 pb-30 text-slate-700 px-4 select-none">
                 <div className="my-4">
@@ -123,7 +139,7 @@ const CreateBill = () => {
                 </div>
                 <span
                     className="block m-auto max-w-50 text-center py-1 bg-sky-50 border border-sky-200 text-sky-500 rounded-lg text-xs font-semibold">
-                    {sessionStorage.getItem("tableNumber") === null ? "Dibawa Pulang" : "Makan di Tempat"}
+                    {sessionStorage.getItem("orderType") === "TA" ? "Dibawa Pulang" : "Makan di Tempat"}
                 </span>
 
                 <div className="form mt-6">
