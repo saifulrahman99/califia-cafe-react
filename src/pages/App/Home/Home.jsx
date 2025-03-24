@@ -25,8 +25,8 @@ function Home() {
                     window.location.href = res.text; // Redirect ke link
                 }
                 if (err) console.error(err);
-            }).then(r => {
-                console.log(r);
+            }).then((r) => {
+                console.log(r)
             });
 
             return () => codeReader.reset();
@@ -145,7 +145,8 @@ function Home() {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative z-1">
+                        <Dialog.Panel
+                            className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative z-1 h-min-60">
                             {/* Title */}
                             <Dialog.Title className="text-lg font-semibold text-gray-900">
                                 Scan QR
