@@ -159,9 +159,6 @@ export const MyProvider = ({children}) => {
         }
     }
 
-    useEffect(() => {
-        console.log(cart)
-    }, [cart])
     return (
         <MyContext.Provider value={{
             isLoading,

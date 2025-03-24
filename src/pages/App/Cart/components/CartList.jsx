@@ -188,7 +188,7 @@ const CartList = () => {
                                                                             <span
                                                                                 className=" block pt-1 font-semibold text-slate-700">{capitalizeWords(topping.name)}</span>
                                                                             <span
-                                                                                className=" block pt-1 font-bold text-slate-500">{formatRupiah(topping.price)}</span>
+                                                                                className=" block pb-1 font-bold text-slate-500">{formatRupiah(topping.price)}</span>
                                                                         </div>
                                                                         <div className="qty my-1">
                                                                             <div
@@ -255,7 +255,7 @@ const CartList = () => {
                     cart.length > 0 && (
                         <div className="w-full fixed -bottom-3.5 py-3 left-0">
                             <div
-                                className="m-auto w-full max-w-md md:max-w-lg bg-white p-4 border border-b-0 border-slate-200 rounded-t-2xl shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.15)] flex justify-between items-center">
+                                className="m-auto w-full max-w-md md:max-w-lg bg-white p-4 pb-3 border border-b-0 border-slate-200 rounded-t-2xl shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.15)] flex justify-between items-center">
                                 <div>
                                     <span className="block text-lg font-semibold -mb-1">Total</span>
                                     <span
@@ -263,7 +263,7 @@ const CartList = () => {
                                 </div>
                                 <div>
                                     <Ripples>
-                                        <Link to="checkout">
+                                        <Link to="create-bill">
                                             <button
                                                 className="btn-primary bg-primary py-2 px-6 text-lg font-semibold text-white rounded-lg shadow cursor-pointer">Selanjutnya
                                             </button>
@@ -384,9 +384,9 @@ const CartList = () => {
                                                 className="my-3 p-2 w-full border border-slate-200 rounded-lg flex item-center justify-between shadow">
                                                 <div>
                                                         <span
-                                                            className="block font-semibold">{capitalizeWords(topping.name)}</span>
+                                                            className="block font-semibold text-slate-700">{capitalizeWords(topping.name)}</span>
                                                     <span
-                                                        className="block font-bold">{formatRupiah(topping.price)}</span>
+                                                        className="block font-bold text-slate-500">{formatRupiah(topping.price)}</span>
                                                 </div>
                                                 <div className="flex items-center justify-center">
                                                     <button

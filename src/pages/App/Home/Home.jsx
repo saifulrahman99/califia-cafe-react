@@ -14,10 +14,10 @@ function Home() {
     const [orderType, setOrderType] = useState("TA");
     const [scrolling, setScrolling] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber"));
+    const [tableNumber, setTableNumber] = useState(sessionStorage.getItem("tableNumber"));
 
     const handleOrderTypeChange = (e) => {
-        if (e.target.value === "DI" && (localStorage.getItem("tableNumber") === null || searchParams.get("t") === "")) {
+        if (e.target.value === "DI" && (sessionStorage.getItem("tableNumber") === null || searchParams.get("t") === "")) {
             setIsOpen(true);
             const codeReader = new BrowserMultiFormatReader();
             codeReader.decodeFromVideoDevice(undefined, "video", (res, err) => {
@@ -36,12 +36,12 @@ function Home() {
 
     useEffect(() => {
         const tableNum = searchParams.get("t");
-        if (tableNum) localStorage.setItem("tableNumber", tableNum);
-        setTableNumber(localStorage.getItem("tableNumber"));
+        if (tableNum) sessionStorage.setItem("tableNumber", tableNum);
+        setTableNumber(sessionStorage.getItem("tableNumber"));
     }, [searchParams]);
 
     useEffect(() => {
-        setOrderType((localStorage.getItem("tableNumber") === null || searchParams.get("t") === "") ? "TA" : "DI");
+        setOrderType((sessionStorage.getItem("tableNumber") === null || searchParams.get("t") === "") ? "TA" : "DI");
         const handleScroll = () => {
             if (window.scrollY > 80) {
                 setScrolling(true); // Ubah warna jika scroll > 50px

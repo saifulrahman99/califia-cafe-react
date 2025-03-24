@@ -1,9 +1,17 @@
 import {Outlet, useNavigate} from "react-router-dom";
 import {Undo2} from "lucide-react";
+import {useContext, useEffect} from "react";
+import {MyContext} from "@/MyContext.jsx";
 
 const Cart = () => {
+    const {cart} = useContext(MyContext);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (cart.length < 1) {
+            navigate("/");
+        }
+    })
     return (
         <>
             <div
