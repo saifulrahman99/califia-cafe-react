@@ -6,7 +6,7 @@ import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import BillService from "@services/billService.js";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import animationLoading from "@assets/lottie/loading.json";
 import Lottie from "lottie-react";
@@ -30,7 +30,6 @@ const CreateBill = () => {
     const navigate = useNavigate();
     const {
         cart,
-        setCart,
         showToast,
         isLoading,
         setIsLoading,
@@ -104,9 +103,10 @@ const CreateBill = () => {
                 const data = await billService.create(bill);
                 addBillToInvoice(data.data.id);
                 if (data.status === 201) {
+                    sessionStorage.setItem("bill_id", data.data.id);
                     setIsLoading(false);
                     showToast("success", "Pesanan Berhasil Dibuat", 1000);
-                    setTimeout(() => setCart([]), 1800);
+                    setTimeout(() => navigate("../bill-status"), 1800);
                 }
             } catch (err) {
                 console.log(err)
