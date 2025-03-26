@@ -7,9 +7,9 @@ import {capitalizeWords} from "@/utils/capitalWords.js";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import ToppingService from "@services/toppingService.js";
 import {MyContext} from "@/MyContext.jsx";
-import DetailMenuSkeleton from "@pages/App/Detail/components/DetailMenuSkeleton.jsx";
+import MenuDetailSkeleton from "@pages/App/Detail/components/MenuDetailSkeleton.jsx";
 
-const DetailMenu = () => {
+const MenuDetail = () => {
     const {id} = useParams();
     const menuService = useMemo(() => MenuService(), []);
     const toppingService = useMemo(() => ToppingService(), []);
@@ -38,7 +38,7 @@ const DetailMenu = () => {
         }, toppingCarts);
         setIsOpen(!isOpen);
         showToast("success", "Berhasil Ditambahkan", 1000);
-        setTimeout(() => navigate(-1), 1800);
+        setTimeout(() => handleGoBack(), 1800);
     }
 
     const handleModifyToppingCart = (topping, qty) => {
@@ -76,7 +76,13 @@ const DetailMenu = () => {
         setMenuQty(qty);
         setOrderTotalPrice(qty * realPrice);
     }
-
+    const handleGoBack = () => {
+        if (window.history.length > 2) {
+            navigate(-1);
+        } else {
+            navigate("/"); // Fallback ke halaman utama
+        }
+    };
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 30) {
@@ -129,15 +135,16 @@ const DetailMenu = () => {
                 className={`header fixed w-full max-w-md md:max-w-lg py-2 px-4 z-2 flex items-center top-6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${scrolling ? 'bg-white shadow' : 'bg-transparent'}`}
             >
                 <div
-                    onClick={() => navigate(-1)}
+                    onClick={handleGoBack}
                     className={`p-1 me-3 cursor-pointer rounded-full bg-white`}>
                     <Undo2 size={25} strokeWidth={1.2}/>
                 </div>
             </div>
 
-            {isLoading ? <DetailMenuSkeleton/> :
+            {isLoading ? <MenuDetailSkeleton/> :
                 <>
-                    <div className="content pb-40 select-none relative z-1">
+                    <div className={`content pb-40 select-none relative z-1 ${menu.stock < 1 && "grayscale"}`}>
+                        {menu.stock < 1 && <div className="absolute inset-0 z-1"></div>}
                         <div className="image aspect-video overflow-hidden flex flex-col justify-center items-center">
                             <img src={replaceLocalhostWithServerHost(menu.image)} alt={menu.name} className="w-full"/>
                         </div>
@@ -178,7 +185,7 @@ const DetailMenu = () => {
                                         let itemQty = (toppingItem != null) ? toppingItem.qty : 0;
                                         return (
                                             <div key={index}
-                                                 className="w-full mb-2 p-2 border border-slate-200 rounded-lg flex justify-between items-center shadow">
+                                                 className={`w-full mb-2 p-2 border border-slate-200 rounded-lg flex justify-between items-center shadow ${topping.stock < 1 && "grayscale"}`}>
                                                 <div className="name">
                                                     <span className="block">{capitalizeWords(topping.name)}</span>
                                                     <span
@@ -211,21 +218,27 @@ const DetailMenu = () => {
                                                                     setOrderTotalPrice(orderTotalPrice + (1 * topping.price))
                                                                 }}
                                                                 type="button"
-                                                                disabled={itemQty === topping.stock}
+                                                                disabled={itemQty >= topping.stock}
                                                                 className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 active:bg-slate-200 ${itemQty < topping.stock ? 'cursor-pointer' : 'cursor-no-drop'}`}>
                                                                 <PlusIcon strokeWidth={1.5} size={16}/>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    <button
-                                                        onClick={() => {
-                                                            handleModifyToppingCart(topping, itemQty + 1)
-                                                            setOrderTotalPrice(orderTotalPrice + (1 * topping.price))
-                                                        }}
-                                                        className="px-2 py-1 btn-primary bg-primary rounded-lg text-white cursor-pointer shadow flex items-center text-sm">
-                                                        <PlusIcon strokeWidth={1}/> Tambah
-                                                    </button>
+                                                    <>
+                                                        {topping.stock < 1 ?
+                                                            <span
+                                                                className="text-slate-500 font-semibold text-xs"> Habis</span> :
+                                                            <button
+                                                                onClick={() => {
+                                                                    handleModifyToppingCart(topping, itemQty + 1)
+                                                                    setOrderTotalPrice(orderTotalPrice + (1 * topping.price))
+                                                                }}
+                                                                className="px-2 py-1 btn-primary bg-primary rounded-lg text-white cursor-pointer shadow flex items-center text-sm">
+                                                                <PlusIcon strokeWidth={1}/> Tambah
+                                                            </button>
+                                                        }
+                                                    </>
                                                 )}
 
                                             </div>
@@ -237,45 +250,56 @@ const DetailMenu = () => {
                     </div>
 
                     <div
-                        className="header fixed w-full max-w-md md:max-w-lg pb-3 pt-2 px-4 z-1 bg-white border border-t-slate-200 border-x-0 border-b-0 flex items-center flex-wrap -bottom-16 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-t-2xl shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.15)]"
+                        className={`header fixed w-full max-w-md md:max-w-lg ${menu.stock < 1 ? "pb-5 grayscale" : "pb-3"} pt-2 px-4 z-1 bg-white border border-t-slate-200 border-x-0 border-b-0 flex items-center flex-wrap -bottom-16 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-t-2xl shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.15)]`}
                     >
                         <div className="qty text-slate-700 w-1/2 mt-2 mb-4">
-                            <div className="flex items-center gap-1">
-                                <button
-                                    onClick={() => handleModifyQtyMenu(menuQty - 1)}
-                                    disabled={menuQty < 2}
-                                    type="button"
-                                    className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty > 1 ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
-                                    <MinusIcon strokeWidth={1.5} size={16}/>
-                                </button>
+                            {menu.stock < 1 ?
+                                <span className="text-slate-500 font-semibold block">Habis</span> :
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        onClick={() => handleModifyQtyMenu(menuQty - 1)}
+                                        disabled={menuQty < 2}
+                                        type="button"
+                                        className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty > 1 ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
+                                        <MinusIcon strokeWidth={1.5} size={16}/>
+                                    </button>
 
-                                <input
-                                    type="number"
-                                    id="Quantity"
-                                    value={menuQty}
-                                    min="1"
-                                    className="h-10 w-5 text-slate-500 border-gray-200 mx-2 text-center font-semibold [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none focus:outline-none cursor-default select-none"
-                                    readOnly={true}
-                                />
-                                <button
-                                    onClick={() => handleModifyQtyMenu(menuQty + 1)}
-                                    disabled={menuQty >= menu.stock}
-                                    type="button"
-                                    className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty < menu.stock ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
-                                    <PlusIcon strokeWidth={1.5} size={16}/>
-                                </button>
+                                    <input
+                                        type="number"
+                                        id="Quantity"
+                                        value={menuQty}
+                                        min="1"
+                                        className="h-10 w-5 text-slate-500 border-gray-200 mx-2 text-center font-semibold [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none focus:outline-none cursor-default select-none"
+                                        readOnly={true}
+                                    />
+                                    <button
+                                        onClick={() => handleModifyQtyMenu(menuQty + 1)}
+                                        disabled={menuQty >= menu.stock}
+                                        type="button"
+                                        className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty < menu.stock ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
+                                        <PlusIcon strokeWidth={1.5} size={16}/>
+                                    </button>
 
-                            </div>
+                                </div>
+                            }
                         </div>
                         <div className="block w-1/2">
                             <span
                                 className="inline-block font-bold mb-2 text-xl text-end w-full text-slate-600"> Total: {formatRupiah(orderTotalPrice)}</span>
                         </div>
-                        <button
-                            onClick={handleAddToCart}
-                            className="btn-primary w-full bg-primary font-semibold text-white py-2 rounded-md cursor-pointer shadow text-lg">Tambah
-                            Pesanan
-                        </button>
+                        {menu.stock < 1 ?
+                            <button
+                                className="btn-primary w-full bg-primary font-semibold text-white py-2 rounded-md cursor-not-allowed shadow text-lg">Tambah
+                                Pesanan
+                            </button>
+                            :
+                            <button
+                                onClick={handleAddToCart}
+                                className="btn-primary w-full bg-primary font-semibold text-white py-2 rounded-md cursor-pointer shadow text-lg">Tambah
+                                Pesanan
+                            </button>
+
+                        }
                     </div>
                 </>
             }
@@ -284,4 +308,4 @@ const DetailMenu = () => {
     );
 };
 
-export default DetailMenu;
+export default MenuDetail;

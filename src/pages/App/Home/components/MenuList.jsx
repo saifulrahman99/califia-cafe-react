@@ -64,7 +64,9 @@ const MenuList = () => {
                     menus[category].sort((a, b) => a.name.localeCompare(b.name));
                 });
                 setMenus(sortMenuByType(menus));
-                setIsLoading(false);
+                if (data.status === 200) {
+                    setIsLoading(false);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -120,15 +122,20 @@ const MenuList = () => {
                                             {menus[category].map((menu) => {
                                                 let realPrice = menu.discount != null ? menu.price - menu.discount.amount : menu.price;
                                                 return (
-                                                    <Ripples className="rounded-lg">
-                                                        <Link to={`menu/${menu.id}`}
-                                                              className="border border-slate-200 rounded-lg overflow-hidden w-full">
+                                                    <Ripples className="rounded-lg relative">
+                                                        {menu.stock < 1 && <div className="absolute inset-0 z-1"></div>}
+                                                        <Link
+                                                            to={`menu/${menu.id}`}
+                                                            className="border border-slate-200 rounded-lg overflow-hidden w-full">
                                                             <div key={menu.id}
-                                                                 className="col">
-                                                                <div className="w-full aspect-square bg-slate-50">
+                                                                 className={`col relative ${menu.stock < 1 && "grayscale"}`}>
+
+                                                                <div className="w-full aspect-square bg-slate-50 relative">
+                                                                    {menu.stock < 1 && <div
+                                                                        className="absolute inset-0 flex justify-center items-center text-white font-bold rounded-full bg-black/20 m-4 text-xl">Habis</div>}
                                                                     <img src={replaceLocalhostWithServerHost(menu.image)}
                                                                          alt={menu.name}
-                                                                         className="w-full aspect-square select-none"/>
+                                                                         className={`w-full aspect-square select-none`}/>
                                                                 </div>
 
                                                                 <div className="body py-2 px-3">

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DetailMenuSkeleton = () => {
+const MenuDetailSkeleton = () => {
     return (
         <>
             <div className="content pb-25 select-none animate-pulse">
@@ -46,4 +46,4 @@ const DetailMenuSkeleton = () => {
     );
 };
 
-export default DetailMenuSkeleton;
+export default MenuDetailSkeleton;
