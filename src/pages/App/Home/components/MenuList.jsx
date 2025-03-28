@@ -8,7 +8,7 @@ import NullMenuData from "@shared/components/Error/NullMenuData.jsx";
 import ScrollToTop from "@pages/App/Home/components/ScrollToTop.jsx";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {MyContext} from "@/MyContext.jsx";
-import LoadingSkeleton from "@pages/App/Home/components/LoadingSkeleton.jsx";
+import MenuListSkeleton from "@pages/App/Home/components/MenuListSkeleton.jsx";
 import {Link} from "react-router-dom";
 
 const MenuList = () => {
@@ -102,7 +102,7 @@ const MenuList = () => {
                 {
                     isLoading ? (
                             <>
-                                <LoadingSkeleton/>
+                                <MenuListSkeleton/>
                             </>
                         ) :
                         isEmptyObject(menus) ?

@@ -82,7 +82,7 @@ const CreateBill = () => {
         const bill = {
             "customer_name": capitalizeWords(data.name),
             "phone_number": data.phone,
-            "table": sessionStorage.getItem("orderType") === "DI" ? "Meja " + sessionStorage.getItem("tableNumber") : null,
+            "table": sessionStorage.getItem("orderType") === "DI" && sessionStorage.getItem("tableNumber") !== null ? "Meja " + sessionStorage.getItem("tableNumber") : null,
             "bill_details": cart.map((item) => {
                 return {
                     menu_id: item.menuId,
@@ -139,13 +139,15 @@ const CreateBill = () => {
                 </div>
                 <span
                     className="block m-auto max-w-50 text-center py-1 bg-sky-50 border border-sky-200 text-sky-500 rounded-lg text-xs font-semibold">
-                    {sessionStorage.getItem("orderType") === "TA" ? "Dibawa Pulang" : "Makan di Tempat"}
+                    {sessionStorage.getItem("orderType") === "DI" && sessionStorage.getItem("tableNumber") !== null ? "Makan di Tempat" : "Dibawa Pulang"}
                 </span>
 
                 <div className="form mt-6">
                     <form onSubmit={handleSubmit(onSubmit)}
-                          className="space-y-2 w-full">
-                        <div>
+                          className="space-y-2 w-full"
+                          autoComplete="off"
+                    >
+                        <div className="mb-4">
                             <label htmlFor="Name" className="relative">
                                 <input
                                     {...register("name")}
@@ -161,7 +163,7 @@ const CreateBill = () => {
                                 />
 
                                 <span
-                                    className="absolute inset-y-0 start-3 -translate-y-5 bg-white px-0.5 text-sm font-medium text-slate-700 transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                                    className="absolute inset-y-0 start-3 -translate-y-5.5 bg-white px-0.5 font-medium text-slate-700 transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5.5"
                                 >Nama</span>
                             </label>
                             <span
@@ -180,6 +182,13 @@ const CreateBill = () => {
                                     className="peer w-full p-3 rounded border border-gray-300 sm:text-sm focus:outline-none active:bg-white"
                                     autoComplete="off"
                                     placeholder=""
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
+                                    onBeforeInput={(e) => {
+                                        if (!/^\d+$/.test(e.data)) {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                     onBlur={() => setTouched((prev) => ({
                                         ...prev,
                                         phone: true
@@ -187,7 +196,7 @@ const CreateBill = () => {
                                 />
 
                                 <span
-                                    className="absolute inset-y-0 start-3 -translate-y-5 bg-white px-0.5 text-sm font-medium text-slate-700 transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5"
+                                    className="absolute inset-y-0 start-3 -translate-y-5.5 bg-white px-0.5  font-medium text-slate-700 transition-transform peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5.5"
                                 >Nomor Whatsapp</span>
                             </label>
                             <span

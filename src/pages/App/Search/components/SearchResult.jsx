@@ -27,7 +27,7 @@ const SearchResult = ({search}) => {
         getRecommendMenus().then(() => {
             setIsLoading(false);
         });
-    }, [menuService, search]);
+    }, [search]);
     return (
         <>
             {isLoading ? <LoadingSearchSkeleton/> :
@@ -43,15 +43,16 @@ const SearchResult = ({search}) => {
                                         let realPrice = menu.discount != null ? menu.price - menu.discount.amount : menu.price;
                                         return (
                                             <div key={index}
-                                                 className={`w-full py-2 border-b border-slate-200 relative ${menu.stock < 1 ? "grayscale cursor-not-allowed" : "cursor-pointer"}`}
+                                                 className={`w-full py-2 border-b border-slate-200 ${menu.stock < 1 ? "grayscale cursor-default" : "cursor-pointer"}`}
                                             >
-                                                {menu.stock < 1 && <div className="absolute inset-0 z-2"></div>}
-                                                <Ripples className="rounded-lg w-full">
+                                                <Ripples className="rounded-lg w-full relative">
+                                                    {menu.stock < 1 && <div className="absolute inset-0 z-2"></div>}
                                                     <Link to={`/menu/${menu.id}`} className="w-full py-2 flex">
                                                         <div
                                                             className="img min-w-10 max-w-25 bg-slate-50 rounded-lg
                                                       overflow-hidden relative">
-                                                            {menu.stock < 1 && <div className="absolute inset-0 flex justify-center items-center text-white font-bold rounded-full bg-black/50 m-4">Habis</div>}
+                                                            {menu.stock < 1 && <div
+                                                                className="absolute inset-0 flex justify-center items-center text-white font-bold rounded-full bg-black/50 m-4">Habis</div>}
                                                             <img src={replaceLocalhostWithServerHost(menu.image)}
                                                                  alt={menu.name}
                                                                  className="w-50 aspect-square"/>

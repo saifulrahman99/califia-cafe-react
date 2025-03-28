@@ -6,7 +6,7 @@ function BillService() {
         return data;
     }
     const getAll = async (query) => {
-        const {data} = await axiosInstance.get("/bills", {params: query});
+        const {data} = await axiosInstance.get('/bills', {params: query});
         return data;
     }
     const getById = async (id) => {
@@ -21,12 +21,17 @@ function BillService() {
         const {data} = await axiosInstance.delete(`/bills/${id}`);
         return data;
     }
+    const getByIDs = async (payload) => {
+        const {data} = await axiosInstance.post('/bills/invoices', payload);
+        return data;
+    }
     return {
         create,
         getById,
         getAll,
         deleteById,
         updateStatus,
+        getByIDs
     }
 }
 

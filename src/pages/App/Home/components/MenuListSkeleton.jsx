@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LoadingSkeleton = () => {
+const MenuListSkeleton = () => {
     return (
         <>
             <div
@@ -27,4 +27,4 @@ const LoadingSkeleton = () => {
     );
 };
 
-export default LoadingSkeleton;
+export default MenuListSkeleton;

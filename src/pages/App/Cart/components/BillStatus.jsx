@@ -16,6 +16,7 @@ const BillStatus = () => {
     const billService = useMemo(() => BillService(), []);
 
     const handleToSetEmptyCart = () => {
+        sessionStorage.removeItem("bill_id");
         setCart([]);
     }
     useEffect(() => {
@@ -89,23 +90,25 @@ const BillStatus = () => {
                             <div className="w-full mx-auto max-w-md md:max-w-lg text-center">
                                 <button
                                     onClick={handleToSetEmptyCart}
-                                    className="btn-primary bg-primary p-2 rounded-lg w-[80%] font-semibold text-white text-lg cursor-pointer">Kembali
+                                    className="btn-primary bg-primary p-2 rounded-lg w-[80%] font-semibold text-white text-lg cursor-pointer">Ke
+                                    Menu Utama
                                 </button>
                             </div>
                         }
                         {
                             bill.status === "canceled" &&
                             <div className="w-full mx-auto max-w-md md:max-w-lg text-center">
-                                <Link to={"/"}>
+                                <Link to={"/"} onClick={() => sessionStorage.removeItem("bill_id")}>
                                     <button
-                                        className="btn-primary bg-primary p-2 rounded-lg w-[80%] font-semibold text-white text-lg cursor-pointer">Kembali
+                                        className="btn-primary bg-primary p-2 rounded-lg w-[80%] font-semibold text-white text-lg cursor-pointer">Ke
+                                        Menu Utama
                                     </button>
                                 </Link>
                             </div>
                         }
                     </>
                 ) : (
-                    <Lottie animationData={clockLoading} loop={true} className="w-[50%] m-auto"/>
+                    <Lottie animationData={clockLoading} loop={true} className="w-[50%] md:w-[30%] m-auto"/>
                 )}
             </div>
         </>

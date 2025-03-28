@@ -381,7 +381,7 @@ const CartList = () => {
                                         return (
                                             <div
                                                 key={index}
-                                                className="my-3 p-2 w-full border border-slate-200 rounded-lg flex item-center justify-between shadow">
+                                                className={`my-3 p-2 w-full border border-slate-200 rounded-lg flex item-center justify-between shadow`}>
                                                 <div>
                                                         <span
                                                             className="block font-semibold text-slate-700">{capitalizeWords(topping.name)}</span>
@@ -389,11 +389,14 @@ const CartList = () => {
                                                         className="block font-bold text-slate-500">{formatRupiah(topping.price)}</span>
                                                 </div>
                                                 <div className="flex items-center justify-center">
-                                                    <button
-                                                        onClick={() => handleAddToppings(topping)}
-                                                        className="px-2 py-1 btn-primary bg-primary rounded-lg text-white cursor-pointer shadow flex items-center text-sm">
-                                                        <PlusIcon strokeWidth={1}/> Tambah
-                                                    </button>
+                                                    {topping.stock < 1 ?
+                                                        <span className="font-semibold text-xs block w-10">Habis</span> :
+                                                        <button
+                                                            onClick={() => handleAddToppings(topping)}
+                                                            className="px-2 py-1 btn-primary bg-primary rounded-lg text-white cursor-pointer shadow flex items-center text-sm">
+                                                            <PlusIcon strokeWidth={1}/> Tambah
+                                                        </button>
+                                                    }
                                                 </div>
                                             </div>
                                         )

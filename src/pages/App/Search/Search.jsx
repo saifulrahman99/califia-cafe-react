@@ -9,7 +9,13 @@ const Search = () => {
     const {cart} = useContext(MyContext);
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
-
+    const handleGoBack = () => {
+        if (window.history.length > 2) {
+            navigate(-1);
+        } else {
+            navigate("/"); // Fallback ke halaman utama
+        }
+    };
     const handleSearchBoxChange = (e) => {
         setSearch(e.target.value);
     }
@@ -19,7 +25,7 @@ const Search = () => {
                 className="header fixed w-full max-w-md md:max-w-lg py-3 px-4 z-1 bg-white shadow flex items-center top-7.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
                 <div
-                    onClick={() => navigate("/")}
+                    onClick={handleGoBack}
                     className="p-1 me-3 cursor-pointer hover:bg-slate-200 rounded-full">
                     <Undo2 size={25} strokeWidth={1.2}/>
                 </div>

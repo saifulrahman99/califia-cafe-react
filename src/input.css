@@ -64,3 +64,6 @@
     background: rgba(100, 100, 100, 0.7); /* Warna lebih gelap saat dihover */
 }
 
+.order-details td, .order-details th {
+    padding: 0.3rem;
+}

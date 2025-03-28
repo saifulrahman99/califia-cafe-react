@@ -5,6 +5,7 @@ import {MyContext} from "@/MyContext.jsx";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {Link} from "react-router-dom";
+import InvoiceDetailSkeleton from "@pages/App/Invoice/components/InvoiceDetailSkeleton.jsx";
 
 const InvoiceList = () => {
     const billService = useMemo(() => BillService(), [])
@@ -61,7 +62,7 @@ const InvoiceList = () => {
             {
                 isLoading ?
                     <>
-                        <p>Loading...</p>
+                        <InvoiceDetailSkeleton/>
                     </>
                     :
                     <>
@@ -72,40 +73,45 @@ const InvoiceList = () => {
                                 <span className="h-px flex-1 bg-slate-700"></span>
                             </div>
                         </div>
-                        {Object.keys(groupedInvoices).map((date) => (
-                            <div key={date}>
-                                <span className="font-bold mb-2 block">{date}</span>
-                                {groupedInvoices[date].map((invoice) => (
-                                    <section key={invoice.id}
-                                             className={`p-3 pb-1 rounded-lg shadow border border-slate-100 mb-4`}>
-                                        <div className="relative">
-                                            <header
-                                                className="font-bold">{invoice.invoice_no}
-                                            </header>
-                                            <p className="mb-2 font-semibold text-sm text-primary">{invoice.table !== null ? "Makan di Tempat" : "Dibawa Pulang"}</p>
-                                            <p>{invoice.customer_name}</p>
-                                            <p>Total : <span
-                                                className="font-semibold">{formatRupiah(invoice.final_price)}</span>
-                                            </p>
-                                            <span
-                                                className="block absolute top-0 right-0 text-sm text-slate-500">{getTimeFromDate(invoice.trans_date)}</span>
-                                            <span
-                                                className="absolute bottom-0 right-0 flex items-center justify-center font-semibold">
+                        {Object.keys(groupedInvoices).length < 1 ? <div
+                                className="absolute inset-0 flex justify-center items-center font-semibold">Belum Ada Transaksi</div> :
+                            <>
+                                {Object.keys(groupedInvoices).map((date) => (
+                                    <div key={date}>
+                                        <span className="font-bold mb-2 block">{date}</span>
+                                        {groupedInvoices[date].map((invoice) => (
+                                            <section key={invoice.id}
+                                                     className={`p-3 pb-1 rounded-lg shadow border border-slate-100 mb-4`}>
+                                                <div className="relative">
+                                                    <header
+                                                        className="font-bold">{invoice.invoice_no}
+                                                    </header>
+                                                    <p className="mb-2 font-semibold text-sm text-primary">{invoice.table !== null ? "Makan di Tempat" : "Dibawa Pulang"}</p>
+                                                    <p>{invoice.customer_name}</p>
+                                                    <p>Total : <span
+                                                        className="font-semibold">{formatRupiah(invoice.final_price)}</span>
+                                                    </p>
+                                                    <span
+                                                        className="block absolute top-0 right-0 text-sm text-slate-500">{getTimeFromDate(invoice.trans_date)}</span>
+                                                    <span
+                                                        className="absolute bottom-0 right-0 flex items-center justify-center font-semibold">
                                                     {getSymbolStatusInvoice(invoice.status)}
-                                                {capitalizeWords(invoice.status)}
+                                                        {capitalizeWords(invoice.status)}
                                                 </span>
-                                        </div>
-                                        <hr className="my-2 border-slate-200"/>
-                                        <Link to={`detail/${invoice.id}`}>
-                                            <button
-                                                className="m-auto p-2 font-medium cursor-pointer text-xs flex justify-between items-center">
-                                                <span className="block mb-1">details</span> <ChevronRight
-                                                size={16}/></button>
-                                        </Link>
-                                    </section>
+                                                </div>
+                                                <hr className="my-2 border-slate-200"/>
+                                                <Link to={`detail/${invoice.id}`}>
+                                                    <button
+                                                        className="m-auto p-2 font-medium cursor-pointer text-xs flex justify-between items-center">
+                                                        <span className="block mb-1">details</span> <ChevronRight
+                                                        size={16}/></button>
+                                                </Link>
+                                            </section>
+                                        ))}
+                                    </div>
                                 ))}
-                            </div>
-                        ))}
+                            </>
+                        }
                     </>
             }
         </>
