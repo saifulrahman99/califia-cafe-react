@@ -93,7 +93,7 @@ function Home() {
                         <Link to={"about"} className={" flex flex-1 justify-between items-center p-4"}>
 
                         <div className="w-2/3">
-                            <h1 className="text-lg font-bold mb-3 text-primary">Califia Cafe</h1>
+                            <h1 className="text-lg font-bold mb-3 text-primary">Califia | Food & Beverage</h1>
                             <p className="text-sm text-gray-600">Jam Buka, 08:00 - 21:00</p>
                         </div>
                         <div className="w-1/3 flex justify-end">

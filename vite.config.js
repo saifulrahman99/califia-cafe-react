@@ -23,8 +23,8 @@ export default defineConfig({
         allowedHosts: ["95c8-36-73-187-235.ngrok-free.app"],
         proxy: {
             "/api": {
-                // target: "http://localhost:8000", // Backend Laravel lokal
-                target: "https://b0b0-36-73-187-235.ngrok-free.app", // Backend Laravel ngrok
+                target: "http://localhost:8000", // Backend Laravel lokal
+                // target: "https://b0b0-36-73-187-235.ngrok-free.app", // Backend Laravel ngrok
                 changeOrigin: true, // Pastikan origin sesuai dengan target
                 // secure: false, // Nonaktifkan SSL verification jika perlu
             },

@@ -67,3 +67,21 @@
 .order-details td, .order-details th {
     padding: 0.3rem;
 }
+
+.thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}

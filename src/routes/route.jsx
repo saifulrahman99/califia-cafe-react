@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter, Navigate} from "react-router-dom";
 import Home from "@pages/App/Home/Home.jsx";
 import NotFound from "@shared/components/Error/NotFound.jsx";
 import AppLayout from "@/layout/AppLayout.jsx";
@@ -12,6 +12,17 @@ import Invoice from "@pages/App/Invoice/Invoice.jsx";
 import InvoiceList from "@pages/App/Invoice/components/InvoiceList.jsx";
 import InvoiceDetail from "@pages/App/Invoice/components/InvoiceDetail.jsx";
 import AboutMe from "@pages/App/AboutMe/AboutMe.jsx";
+import Login from "@pages/Admin/Auth/Login.jsx";
+import Dashboard from "@pages/Admin/Dashboard/Dashboard.jsx";
+import AdminLayout from "@/layout/AdminLayout.jsx";
+import MenuList from "@pages/Admin/Menu/MenuList.jsx";
+import Discounts from "@pages/Admin/Menu/Discounts.jsx";
+import Categories from "@pages/Admin/Menu/Categories.jsx";
+import Toppings from "@pages/Admin/Topping/Toppings.jsx";
+import Transactions from "@pages/Admin/Transaction/Transactions.jsx";
+import StoreProfile from "@pages/Admin/Setting/StoreProfile.jsx";
+import Operational from "@pages/Admin/Setting/Operational.jsx";
+import Account from "@pages/Admin/Account/Account.jsx";
 
 const router = createBrowserRouter([
         {
@@ -44,6 +55,73 @@ const router = createBrowserRouter([
                     element: <AboutMe/>
                 },
             ]
+        },
+        {
+            path: "auth/login",
+            element: <Login/>
+        },
+        {
+            path: "admin",
+            element: <AdminLayout/>,
+            children: [
+                {
+                    index: true,
+                    element: <Navigate to="dashboard" replace/>,
+                },
+                {
+                    path: "dashboard",
+                    element: <Dashboard/>
+                },
+                {
+                    path: "menu",
+                    children: [
+                        {
+                            index: true,
+                            element: <Navigate to="list" replace/>,
+                        },
+                        {
+                            path: "list",
+                            element: <MenuList/>
+                        },
+                        {
+                            path: "categories",
+                            element: <Categories/>
+                        },
+                        {
+                            path: "discounts",
+                            element: <Discounts/>
+                        }
+                    ]
+                },
+                {
+                    path: "toppings",
+                    element: <Toppings/>
+                },
+                {
+                    path: "transactions",
+                    element: <Transactions/>
+                },
+                {
+                    path: "settings",
+                    children: [
+                        {
+                            index: true,
+                            element: <Navigate to="store-profile" replace/>,
+                        },
+                        {
+                            path: "store-profile",
+                            element: <StoreProfile/>
+                        }, {
+                            path: "operational-store",
+                            element: <Operational/>
+                        }
+                    ]
+                },
+                {
+                    path: "account",
+                    element: <Account/>
+                }
+            ],
         },
         {
             path: "*", element:

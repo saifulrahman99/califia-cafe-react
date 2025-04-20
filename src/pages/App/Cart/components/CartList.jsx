@@ -10,7 +10,7 @@ import {calculateOrderTotalPrice} from "@/utils/calculateOrderTotalPrice.js";
 import ToppingService from "@services/toppingService.js";
 import {Link} from "react-router-dom";
 import Ripples from "react-ripples";
-import ConfirmationModal from "@shared/components/Modal/ConfirmationModal.jsx";
+import ConfirmationModalApp from "@shared/components/Modal/ConfirmationModalApp.jsx";
 
 const CartList = () => {
     const {
@@ -277,7 +277,7 @@ const CartList = () => {
             </div>
 
             {/*KONFIRMASI HAPUS ORDER*/}
-            <ConfirmationModal
+            <ConfirmationModalApp
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleConfirm}

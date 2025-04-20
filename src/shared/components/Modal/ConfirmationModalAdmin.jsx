@@ -1,12 +1,12 @@
 import {Fragment} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 
-const ConfirmationModal = ({isOpen, onClose, onConfirm, title, message}) => {
+const ConfirmationModalAdmin = ({isOpen, onClose, onConfirm, title, message}) => {
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div"
-                        className="fixed inset-0 flex items-center justify-center z-50 max-w-md md:max-w-lg mx-auto select-none"
+                        className="fixed inset-0 flex items-center justify-center z-50 select-none"
                         onClose={onClose}>
                     {/* Background overlay */}
                     <Transition.Child
@@ -43,16 +43,16 @@ const ConfirmationModal = ({isOpen, onClose, onConfirm, title, message}) => {
                             {/* Buttons */}
                             <div className="mt-4 flex justify-end space-x-2">
                                 <button
-                                    className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 transition hover:text-slate-100 cursor-pointer"
+                                    className="px-4 py-2 text-white bg-gray-400 rounded-md hover:bg-gray-500 transition hover: cursor-pointer"
                                     onClick={onClose}
                                 >
-                                    Batal
+                                    Close
                                 </button>
                                 <button
-                                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition cursor-pointer"
+                                    className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition cursor-pointer"
                                     onClick={onConfirm}
                                 >
-                                    Konfirmasi
+                                    Confirm
                                 </button>
                             </div>
                         </Dialog.Panel>
@@ -63,4 +63,4 @@ const ConfirmationModal = ({isOpen, onClose, onConfirm, title, message}) => {
     );
 };
 
-export default ConfirmationModal;
+export default ConfirmationModalAdmin;
