@@ -43,16 +43,16 @@ const ConfirmationModalApp = ({isOpen, onClose, onConfirm, title, message}) => {
                             {/* Buttons */}
                             <div className="mt-4 flex justify-end space-x-2">
                                 <button
-                                    className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 transition hover:text-slate-100 cursor-pointer"
+                                    className="px-4 py-2 text-white bg-gray-400 rounded-md hover:bg-gray-500 transition cursor-pointer"
                                     onClick={onClose}
                                 >
-                                    Batal
+                                    Close
                                 </button>
                                 <button
-                                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition cursor-pointer"
+                                    className="px-4 py-2 bg-red-400 text-white rounded-md hover:bg-red-500 transition cursor-pointer"
                                     onClick={onConfirm}
                                 >
-                                    Konfirmasi
+                                    Confirm
                                 </button>
                             </div>
                         </Dialog.Panel>

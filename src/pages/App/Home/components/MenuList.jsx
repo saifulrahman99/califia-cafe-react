@@ -7,7 +7,7 @@ import Ripples from 'react-ripples'
 import NullMenuData from "@shared/components/Error/NullMenuData.jsx";
 import ScrollToTop from "@pages/App/Home/components/ScrollToTop.jsx";
 import {capitalizeWords} from "@/utils/capitalWords.js";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import MenuListSkeleton from "@pages/App/Home/components/MenuListSkeleton.jsx";
 import {Link} from "react-router-dom";
 

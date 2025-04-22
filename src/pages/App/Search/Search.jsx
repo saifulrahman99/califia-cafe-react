@@ -3,7 +3,7 @@ import {SearchIcon, Undo2} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import SearchResult from "@pages/App/Search/components/SearchResult.jsx";
 import Cart from "@shared/components/Cart/Cart.jsx";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 
 const Search = () => {
     const {cart} = useContext(MyContext);

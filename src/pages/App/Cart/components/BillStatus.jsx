@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import BillService from "@services/billService.js";
 import {subscribeToChannel} from "@/pusher/pusher.js";
 import clockLoading from "@assets/lottie/loading.json"

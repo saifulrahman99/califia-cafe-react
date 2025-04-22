@@ -6,7 +6,7 @@ import {replaceLocalhostWithServerHost} from "@/utils/repllaceHostLocalToHostSer
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import ToppingService from "@services/toppingService.js";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import MenuDetailSkeleton from "@pages/App/Detail/components/MenuDetailSkeleton.jsx";
 
 const MenuDetail = () => {

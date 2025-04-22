@@ -5,7 +5,7 @@ import {capitalizeWords} from "@/utils/capitalWords.js";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import {replaceLocalhostWithServerHost} from "@/utils/repllaceHostLocalToHostServer.js";
 import Ripples from "react-ripples";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import LoadingSearchSkeleton from "@pages/App/Search/components/LoadingSearchSkeleton.jsx";
 import {Link} from "react-router-dom";
 

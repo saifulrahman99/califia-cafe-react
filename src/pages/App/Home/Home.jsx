@@ -4,7 +4,7 @@ import MenuList from "@pages/App/Home/components/MenuList.jsx";
 import Ripples from 'react-ripples'
 import {useSearchParams, Link} from "react-router-dom";
 import Cart from "@shared/components/Cart/Cart.jsx";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import {BrowserMultiFormatReader} from "@zxing/browser";
 import {Dialog, Transition} from "@headlessui/react";
 

@@ -12,7 +12,7 @@ import Invoice from "@pages/App/Invoice/Invoice.jsx";
 import InvoiceList from "@pages/App/Invoice/components/InvoiceList.jsx";
 import InvoiceDetail from "@pages/App/Invoice/components/InvoiceDetail.jsx";
 import AboutMe from "@pages/App/AboutMe/AboutMe.jsx";
-import Login from "@pages/Admin/Auth/Login.jsx";
+import Login from "@pages/Authentication/Login.jsx";
 import Dashboard from "@pages/Admin/Dashboard/Dashboard.jsx";
 import AdminLayout from "@/layout/AdminLayout.jsx";
 import MenuList from "@pages/Admin/Menu/MenuList.jsx";
@@ -23,6 +23,7 @@ import Transactions from "@pages/Admin/Transaction/Transactions.jsx";
 import StoreProfile from "@pages/Admin/Setting/StoreProfile.jsx";
 import Operational from "@pages/Admin/Setting/Operational.jsx";
 import Account from "@pages/Admin/Account/Account.jsx";
+import ProtectedRoute from "@/routes/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
         {
@@ -62,7 +63,11 @@ const router = createBrowserRouter([
         },
         {
             path: "admin",
-            element: <AdminLayout/>,
+            element: (
+                <ProtectedRoute>
+                    <AdminLayout/>
+                </ProtectedRoute>
+            ),
             children: [
                 {
                     index: true,

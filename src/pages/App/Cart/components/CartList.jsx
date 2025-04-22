@@ -1,5 +1,5 @@
 import React from 'react';
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import {useContext, useState, Fragment, useEffect, useMemo} from "react";
 import {Edit3, MinusIcon, NotepadText, PlusIcon, Trash2Icon, Undo2, X} from "lucide-react";
 import {Disclosure, Dialog, Transition} from "@headlessui/react";

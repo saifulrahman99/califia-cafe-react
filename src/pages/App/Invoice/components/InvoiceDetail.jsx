@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useParams} from "react-router-dom";
 import BillService from "@services/billService.js";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import Lottie from "lottie-react";
 import clockLoading from "@assets/lottie/loading.json";
 import {Phone} from "lucide-react";

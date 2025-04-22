@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {Check, ChevronRight, Timer, Undo2, X} from "lucide-react";
 import BillService from "@services/billService.js";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {Link} from "react-router-dom";

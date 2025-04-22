@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import {calculateOrderTotalPrice} from "@/utils/calculateOrderTotalPrice.js";
 import * as yup from "yup";

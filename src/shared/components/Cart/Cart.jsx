@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {ShoppingBasket} from "lucide-react";
 import Ripples from "react-ripples";
 import {formatRupiah} from "@/utils/formatCurrency.js";
-import {MyContext} from "@/MyContext.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 import {Link} from "react-router-dom";
 import {calculateOrderTotalPrice} from "@/utils/calculateOrderTotalPrice.js";
 
