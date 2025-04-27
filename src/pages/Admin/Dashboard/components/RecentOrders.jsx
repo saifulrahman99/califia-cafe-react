@@ -9,11 +9,13 @@ const RecentOrders = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [idOrder, setIdOrder] = useState(null);
     const [statusOrder, setStatusOrder] = useState(null);
+    const [titleConfirmation, setTitleConfirmation] = useState(null);
 
     const handleSetIdAndStatus = (data) => {
         setIsModalOpen(true);
         setIdOrder(data.id);
         setStatusOrder(data.status);
+        setTitleConfirmation(data.title);
     };
 
     const handleChangeBillStatus = () => {
@@ -114,6 +116,13 @@ const RecentOrders = () => {
                                             Detail
                                         </button>
                                         <button
+                                            onClick={() => {
+                                                handleSetIdAndStatus({
+                                                    id: order.id,
+                                                    status: "canceled",
+                                                    title: "Tolak Pesanan"
+                                                });
+                                            }}
                                             className="cursor-pointer px-2 py-1 bg-red-600 text-white rounded hover:bg-red-500">
                                             Batalkan
                                         </button>
@@ -123,6 +132,7 @@ const RecentOrders = () => {
                                                     handleSetIdAndStatus({
                                                         id: order.id,
                                                         status: "confirm",
+                                                        title: "Setujui Pesanan"
                                                     });
                                                 }}
                                                 className="cursor-pointer px-2 py-1 bg-sky-600 text-white rounded hover:bg-sky-500"
@@ -155,7 +165,7 @@ const RecentOrders = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleChangeBillStatus}
-                title="Konfirmasi"
+                title={titleConfirmation}
                 message="Apakah Anda yakin?"
             />
         </div>

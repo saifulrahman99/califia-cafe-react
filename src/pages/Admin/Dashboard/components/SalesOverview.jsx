@@ -56,7 +56,6 @@ const SalesOverview = () => {
                 response.data.data.forEach(order => {
                     const orderDate = parseISO(order.trans_date);
                     dateRange.forEach((date, index) => {
-                        console.log(order.final_price)
                         if (isSameDay(orderDate, date)) {
                             dailyTotals[index] += order.final_price;
                         }
