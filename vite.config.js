@@ -5,7 +5,11 @@ import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react({
+        fastRefresh: {
+            exclude: ['node_modules/react-chartjs-2/**']
+        }
+    })],
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
@@ -20,7 +24,7 @@ export default defineConfig({
         port: 5173, // Port default Vite
         strictPort: true, // Pastikan Vite tidak mencari port lain
         cors: true, // Aktifkan CORS agar bisa diakses dari domain lain
-        allowedHosts: ["95c8-36-73-187-235.ngrok-free.app"],
+        allowedHosts: ["a1fd-36-73-185-209.ngrok-free.app"],
         proxy: {
             "/api": {
                 target: "http://localhost:8000", // Backend Laravel lokal

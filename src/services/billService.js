@@ -14,7 +14,7 @@ function BillService() {
         return data;
     }
     const updateStatus = async (id, payload) => {
-        const {data} = await axiosInstance.put(`/bills/${id}`, payload);
+        const {data} = await axiosInstance.patch(`/bills/${id}`, payload);
         return data;
     }
     const deleteById = async (id) => {
@@ -25,13 +25,18 @@ function BillService() {
         const {data} = await axiosInstance.post('/bills/invoices', payload);
         return data;
     }
+    const getRecentOrders = async () => {
+        const {data} = await axiosInstance.get('/bills/recent')
+        return data;
+    }
     return {
         create,
         getById,
         getAll,
         deleteById,
         updateStatus,
-        getByIDs
+        getByIDs,
+        getRecentOrders
     }
 }
 

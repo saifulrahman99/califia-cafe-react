@@ -9,7 +9,7 @@ import {
     Menu,
     ScrollText,
     Settings,
-    SquareMenu, UserCircle, UserCircle2,
+    SquareMenu, UserCircle2,
     X
 } from "lucide-react";
 import {capitalizeWords} from "@/utils/capitalWords.js";
@@ -33,7 +33,7 @@ const AdminLayout = () => {
                         <div className="flex flex-row justify-between">
                             <img src="/logo.png" alt="logo"
                                  className={"bg-slate-50 w-20 rounded-full border border-slate-200"}/>
-                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden">
+                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden cursor-pointer">
                                 <X className="text-slate-500" size={22}/>
                             </button>
                         </div>
@@ -199,22 +199,23 @@ const AdminLayout = () => {
                 </aside>
 
                 {/* MAIN CONTENT */}
-                <div className="flex flex-col flex-1">
+                <div className="w-full overflow-y-auto">
                     <div
-                        className="top-bar w-full bg-white border-b border-slate-200 p-4">
+                        className="sticky top-0 z-1 top-bar w-full bg-white border-b border-slate-200 p-4 flex justify-between lg:justify-end">
                         {/* Toggle Sidebar Button */}
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden float-left">
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden float-left cursor-pointer">
                             <Menu className="text-slate-700"/>
                         </button>
 
-                        <div className="notify float-right">
+                        <div className="notify">
                             Notify
                         </div>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-4 text-slate-500">
+                    <div className="w-full p-4 text-slate-500">
                         <div
                             className="px-4 py-2 font-semibold w-full bg-white rounded mb-4 border border-slate-200"> {capitalizeWords(location.pathname.replace("/admin/", ""))}</div>
+
                         <Outlet/>
                     </div>
                 </div>
