@@ -15,15 +15,18 @@ import AboutMe from "@pages/App/AboutMe/AboutMe.jsx";
 import Login from "@pages/Authentication/Login.jsx";
 import Dashboard from "@pages/Admin/Dashboard/Dashboard.jsx";
 import AdminLayout from "@/layout/AdminLayout.jsx";
-import MenuList from "@pages/Admin/Menu/MenuList.jsx";
-import Discounts from "@pages/Admin/Menu/Discounts.jsx";
-import Categories from "@pages/Admin/Menu/Categories.jsx";
-import Toppings from "@pages/Admin/Topping/Toppings.jsx";
-import Transactions from "@pages/Admin/Transaction/Transactions.jsx";
+import MenuList from "@pages/Admin/Menu/components/MenuList.jsx";
+import Discount from "@pages/Admin/Discount/Discount.jsx";
+import Category from "@pages/Admin/Category/Category.jsx";
+import Topping from "@pages/Admin/Topping/Topping.jsx";
+import Transaction from "@pages/Admin/Transaction/Transaction.jsx";
 import StoreProfile from "@pages/Admin/Setting/StoreProfile.jsx";
 import Operational from "@pages/Admin/Setting/Operational.jsx";
 import Account from "@pages/Admin/Account/Account.jsx";
 import ProtectedRoute from "@/routes/ProtectedRoute.jsx";
+import MenuLayout from "@pages/Admin/Menu/MenuLayout.jsx";
+import MenuDetailList from "@pages/Admin/Menu/components/MenuDetailList.jsx";
+import MenuForm from "@pages/Admin/Menu/components/MenuForm.jsx";
 
 const router = createBrowserRouter([
         {
@@ -86,25 +89,43 @@ const router = createBrowserRouter([
                         },
                         {
                             path: "list",
-                            element: <MenuList/>
+                            element: <MenuLayout/>,
+                            children: [
+                                {
+                                    index: true,
+                                    element: <MenuList/>,
+                                },
+                                {
+                                    path: "detail/:id",
+                                    element: <MenuDetailList/>,
+                                },
+                                {
+                                    path: "add-menu",
+                                    element: <MenuForm/>
+                                },
+                                {
+                                    path: "update-menu/:id",
+                                    element: <MenuForm/>
+                                }
+                            ]
                         },
                         {
                             path: "categories",
-                            element: <Categories/>
+                            element: <Category/>
                         },
                         {
                             path: "discounts",
-                            element: <Discounts/>
+                            element: <Discount/>
                         }
                     ]
                 },
                 {
                     path: "toppings",
-                    element: <Toppings/>
+                    element: <Topping/>
                 },
                 {
                     path: "transactions",
-                    element: <Transactions/>
+                    element: <Transaction/>
                 },
                 {
                     path: "settings",

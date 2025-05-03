@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Discounts = () => {
+const Discount = () => {
     return (
         <>
             
@@ -8,4 +8,4 @@ const Discounts = () => {
     );
 };
 
-export default Discounts;
+export default Discount;

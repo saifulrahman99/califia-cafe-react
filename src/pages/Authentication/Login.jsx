@@ -34,7 +34,6 @@ const Login = () => {
         const loginAction = async () => {
             try {
                 const response = await authService.login(data); // tidak perlu stringify
-                console.log(response);
                 login(response.data);
             } catch {
                 showToast("error", "Email Atau Password Salah", 1000);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Toppings = () => {
+const Topping = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const Toppings = () => {
     );
 };
 
-export default Toppings;
+export default Topping;

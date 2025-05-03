@@ -17,7 +17,7 @@ function MenuService() {
     }
 
     const update = async (payload) => {
-        const {data} = await axiosInstance.put('/menus', payload);
+        const {data} = await axiosInstance.post('/menus', payload);
         return data;
     }
 

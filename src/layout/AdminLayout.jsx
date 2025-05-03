@@ -12,7 +12,6 @@ import {
     SquareMenu, UserCircle2,
     X
 } from "lucide-react";
-import {capitalizeWords} from "@/utils/capitalWords.js";
 import ConfirmationModalAdmin from "@shared/components/Modal/ConfirmationModalAdmin.jsx";
 import {ToastContainer} from "react-toastify";
 import {useAuth} from "@/context/AuthContext.jsx";
@@ -203,7 +202,8 @@ const AdminLayout = () => {
                     <div
                         className="sticky top-0 z-1 top-bar w-full bg-white border-b border-slate-200 p-4 flex justify-between lg:justify-end">
                         {/* Toggle Sidebar Button */}
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden float-left cursor-pointer">
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)}
+                                className="lg:hidden float-left cursor-pointer">
                             <Menu className="text-slate-700"/>
                         </button>
 
@@ -213,9 +213,6 @@ const AdminLayout = () => {
                     </div>
 
                     <div className="w-full p-4 text-slate-500">
-                        <div
-                            className="px-4 py-2 font-semibold w-full bg-white rounded mb-4 border border-slate-200"> {capitalizeWords(location.pathname.replace("/admin/", ""))}</div>
-
                         <Outlet/>
                     </div>
                 </div>

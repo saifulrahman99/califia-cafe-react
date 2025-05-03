@@ -21,4 +21,16 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            // Token mungkin telah kedaluwarsa, lakukan sesuatu, misalnya logout
+            console.log('Token expired or invalid');
+            localStorage.removeItem('token');
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default axiosInstance;
