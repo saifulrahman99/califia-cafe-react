@@ -27,6 +27,8 @@ import ProtectedRoute from "@/routes/ProtectedRoute.jsx";
 import MenuLayout from "@pages/Admin/Menu/MenuLayout.jsx";
 import MenuDetailList from "@pages/Admin/Menu/components/MenuDetailList.jsx";
 import MenuForm from "@pages/Admin/Menu/components/MenuForm.jsx";
+import CategoryList from "@pages/Admin/Category/components/CategoryList.jsx";
+import CategoryForm from "@pages/Admin/Category/components/CategoryForm.jsx";
 
 const router = createBrowserRouter([
         {
@@ -111,7 +113,21 @@ const router = createBrowserRouter([
                         },
                         {
                             path: "categories",
-                            element: <Category/>
+                            element: <Category/>,
+                            children: [
+                                {
+                                    index: true,
+                                    element: <CategoryList/>,
+                                },
+                                {
+                                    path: "add-category",
+                                    element: <CategoryForm/>
+                                },
+                                {
+                                    path: "update-category/:id",
+                                    element: <CategoryForm/>
+                                }
+                            ]
                         },
                         {
                             path: "discounts",

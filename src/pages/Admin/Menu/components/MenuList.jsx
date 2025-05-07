@@ -120,7 +120,7 @@ const MenuList = () => {
                 </NavLink>
             </div>
 
-            <div className="p-4 rounded bg-white">
+            <div className="px-4 py-2 rounded bg-white">
                 <div className="flex items-center justify-between mt-2">
                     <div className="perpage">
                         <select onChange={handlePageChange}

@@ -144,14 +144,14 @@ const MenuForm = () => {
                         stock: data.stock,
                         type: data.type,
                         topping_enabled: data.topping_enabled,
-                        category_id: data.category.id, // ⚠️ penting: nilai value saja
+                        category_id: data.category.id,
                         discount_id: data.discount?.id ?? "",
                         image: null
                     });
                 }
                 setIsLoadingFetchData(false);
-            } catch (err) {
-                console.error(err);
+            } catch {
+                showToast("error", "gagal memuat data", 1000);
             }
         };
         fetchData();
