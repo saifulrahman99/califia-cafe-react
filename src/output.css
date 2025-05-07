@@ -415,6 +415,9 @@
   .my-5 {
     margin-block: calc(var(--spacing) * 5);
   }
+  .my-auto {
+    margin-block: auto;
+  }
   .ms-2 {
     margin-inline-start: calc(var(--spacing) * 2);
   }
@@ -462,6 +465,9 @@
   }
   .-mb-1 {
     margin-bottom: calc(var(--spacing) * -1);
+  }
+  .mb-0\.5 {
+    margin-bottom: calc(var(--spacing) * 0.5);
   }
   .mb-1 {
     margin-bottom: calc(var(--spacing) * 1);

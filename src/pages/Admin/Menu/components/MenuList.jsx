@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useMemo, useState} from 'react';
 import MenuService from "@services/menuService.js";
 import {MyContext} from "@/context/MyContext.jsx";
 import {formatRupiah} from "@/utils/formatCurrency.js";
-import {ChartBar, CirclePlus, Edit2, Search, Trash} from "lucide-react";
+import {ChartBar, ChevronDown, ChevronUp, CirclePlus, Edit2, Search, Trash} from "lucide-react";
 import {NavLink} from "react-router-dom";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import ConfirmationModalAdmin from "@shared/components/Modal/ConfirmationModalAdmin.jsx";
@@ -22,6 +22,8 @@ const MenuList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [idToDelete, setIdToDelete] = useState(null);
     const [refresh, setRefresh] = useState(false);
+    const [direction, setDirection] = useState(true);
+    const [sort, setSort] = useState("name");
 
     const handlePaginationData = (meta) => {
         const currentPage = meta.current_page;
@@ -94,11 +96,23 @@ const MenuList = () => {
         setIsModalOpen(false);
     }
 
+    const handleSort = (data) => {
+        setSort(data.sortBy);
+        const newDirection = !direction;
+        setDirection(newDirection);
+    }
+
     useEffect(() => {
         setIsLoading(!isLoading);
         const getMenus = async () => {
             try {
-                const response = await menuService.getAll({q: q, page: page, perPage: perPage});
+                const response = await menuService.getAll({
+                    q: q,
+                    page: page,
+                    perPage: perPage,
+                    direction: direction ? "asc" : "desc",
+                    sortBy: sort,
+                });
                 return response.data;
             } catch (error) {
                 console.log(error);
@@ -109,7 +123,7 @@ const MenuList = () => {
             handlePaginationData(data.meta);
             setIsLoading(false);
         });
-    }, [menuService, page, perPage, q, refresh]);
+    }, [menuService, page, perPage, q, refresh, sort, direction]);
     return (
         <>
             <div className="px-4 py-2 font-semibold w-full bg-white rounded mb-4 border border-slate-200 flex">
@@ -148,14 +162,41 @@ const MenuList = () => {
                         <thead className="bg-gray-200">
                         <tr>
                             <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">No</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nama
-                                Menu
+                            <th
+                                onClick={() => handleSort({sortBy: "name"})}
+                                className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer">Nama
+                                Menu {
+                                    sort === "name" ?
+                                        sort === "name" && direction ?
+                                            <ChevronDown size={18} className="inline mb-0.5"/> :
+                                            <ChevronUp size={18} className="inline mb-0.5"/>
+                                        : <ChevronDown size={18} className="inline mb-0.5"/>
+                                }
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Kategori</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Jenis</th>
-
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Harga</th>
-                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Stok</th>
+                            <th
+                                className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer">Jenis
+                            </th>
+                            <th
+                                onClick={() => handleSort({sortBy: "price"})}
+                                className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer">Harga {
+                                sort === "price" ?
+                                    sort === "price" && direction ?
+                                        <ChevronDown size={18} className="inline mb-0.5"/> :
+                                        <ChevronUp size={18} className="inline mb-0.5"/>
+                                    : <ChevronDown size={18} className="inline mb-0.5"/>
+                            }
+                            </th>
+                            <th
+                                onClick={() => handleSort({sortBy: "stock"})}
+                                className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer">Stok {
+                                sort === "stock" ?
+                                    sort === "stock" && direction ?
+                                        <ChevronDown size={18} className="inline mb-0.5"/> :
+                                        <ChevronUp size={18} className="inline mb-0.5"/>
+                                    : <ChevronDown size={18} className="inline mb-0.5"/>
+                            }
+                            </th>
                             <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Aksi</th>
                         </tr>
                         </thead>
