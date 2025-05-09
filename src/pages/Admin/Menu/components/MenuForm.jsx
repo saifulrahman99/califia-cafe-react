@@ -12,6 +12,7 @@ import {MyContext} from "@/context/MyContext.jsx";
 import AdminLoading from "@shared/components/Loading/AdminLoading.jsx";
 import defaultImage from "@assets/images/default.jpg";
 import Select from "react-select";
+import {formatRupiah} from "@/utils/formatCurrency.js";
 
 // Validasi dengan Yup
 const schema = yup.object().shape({
@@ -226,7 +227,7 @@ const MenuForm = () => {
 
                         {[
                             {label: "Nama", name: "name", type: "text"},
-                            {label: "Harga", name: "price", type: "number"},
+                            {label: "Harga (Rp)", name: "price", type: "number"},
                             {label: "Stok", name: "stock", type: "number"},
                         ].map(({label, name, type}) => (
                             <div key={name} className="col-span-2 md:col-span-1">
@@ -353,7 +354,7 @@ const MenuForm = () => {
                                 <option value="">-</option>
                                 {discounts.map((disc) => (
                                     <option key={disc.id} value={disc.id}>
-                                        {capitalizeWords(disc.name)}
+                                        {capitalizeWords(disc.name)} - {formatRupiah(disc.amount)}
                                     </option>
                                 ))}
                             </select>

@@ -126,15 +126,14 @@ const MenuList = () => {
     }, [menuService, page, perPage, q, refresh, sort, direction]);
     return (
         <>
-            <div className="px-4 py-2 font-semibold w-full bg-white rounded mb-4 border border-slate-200 flex">
-                <NavLink
-                    to={"add-menu"}
-                    className="text-amber-500 flex items-center gap-1 cursor-pointer border shadow px-2 py-1 rounded-lg hover:bg-amber-500 hover:text-white">
-                    <CirclePlus size={16}/> tambah menu baru
-                </NavLink>
-            </div>
-
-            <div className="px-4 py-2 rounded bg-white">
+            <div className="px-4 py-2 rounded bg-white border border-slate-200">
+                <div className="flex my-2">
+                    <NavLink
+                        to={"add-menu"}
+                        className="text-amber-500 flex items-center gap-1 cursor-pointer border shadow px-2 py-1 rounded-lg hover:bg-amber-500 hover:text-white">
+                        <CirclePlus size={16}/> tambah menu baru
+                    </NavLink>
+                </div>
                 <div className="flex items-center justify-between mt-2">
                     <div className="perpage">
                         <select onChange={handlePageChange}

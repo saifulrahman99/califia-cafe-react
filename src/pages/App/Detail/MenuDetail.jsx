@@ -2,7 +2,7 @@ import {useContext, useEffect, useMemo, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import MenuService from "@services/menuService.js";
 import {MinusIcon, PlusIcon, Undo2} from "lucide-react";
-import {replaceLocalhostWithServerHost} from "@/utils/repllaceHostLocalToHostServer.js";
+import {replaceLocalhostWithServerHost} from "@/utils/replaceHostLocalToHostServer.js";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import ToppingService from "@services/toppingService.js";

@@ -29,6 +29,8 @@ import MenuDetailList from "@pages/Admin/Menu/components/MenuDetailList.jsx";
 import MenuForm from "@pages/Admin/Menu/components/MenuForm.jsx";
 import CategoryList from "@pages/Admin/Category/components/CategoryList.jsx";
 import CategoryForm from "@pages/Admin/Category/components/CategoryForm.jsx";
+import DiscountList from "@pages/Admin/Discount/components/DiscountList.jsx";
+import DiscountForm from "@pages/Admin/Discount/components/DiscountForm.jsx";
 
 const router = createBrowserRouter([
         {
@@ -131,7 +133,21 @@ const router = createBrowserRouter([
                         },
                         {
                             path: "discounts",
-                            element: <Discount/>
+                            element: <Discount/>,
+                            children: [
+                                {
+                                    index: true,
+                                    element: <DiscountList/>,
+                                },
+                                {
+                                    path: "add-discount",
+                                    element: <DiscountForm/>
+                                },
+                                {
+                                    path: "update-discount/:id",
+                                    element: <DiscountForm/>
+                                },
+                            ]
                         }
                     ]
                 },

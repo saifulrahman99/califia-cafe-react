@@ -60,7 +60,7 @@ const CategoryList = () => {
     }, [categoryService, q, refresh]);
     return (
         <>
-            <div className="p-4 rounded bg-white">
+            <div className="p-4 rounded bg-white border border-slate-200">
                 <div className="flex items-center mt-2">
                     <div
                         className="search-box flex items-center gap-x-2 border-2 border-slate-300 rounded-lg py-2 px-2 focus-within:border-amber-500">

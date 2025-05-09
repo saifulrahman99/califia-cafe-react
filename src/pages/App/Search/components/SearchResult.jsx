@@ -3,7 +3,7 @@ import MenuService from "@services/menuService.js";
 import NullMenuData from "@shared/components/Error/NullMenuData.jsx";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {formatRupiah} from "@/utils/formatCurrency.js";
-import {replaceLocalhostWithServerHost} from "@/utils/repllaceHostLocalToHostServer.js";
+import {replaceLocalhostWithServerHost} from "@/utils/replaceHostLocalToHostServer.js";
 import Ripples from "react-ripples";
 import {MyContext} from "@/context/MyContext.jsx";
 import LoadingSearchSkeleton from "@pages/App/Search/components/LoadingSearchSkeleton.jsx";

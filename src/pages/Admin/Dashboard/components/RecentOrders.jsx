@@ -1,7 +1,9 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import BillService from "@services/billService.js";
 import ConfirmationModalAdmin from "@shared/components/Modal/ConfirmationModalAdmin.jsx";
 import {subscribeToChannel} from "@/pusher/pusher.js";
+import {MyContext} from "@/context/MyContext.jsx";
+import {useAuth} from "@/context/AuthContext.jsx";
 
 const RecentOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -10,6 +12,8 @@ const RecentOrders = () => {
     const [idOrder, setIdOrder] = useState(null);
     const [statusOrder, setStatusOrder] = useState(null);
     const [titleConfirmation, setTitleConfirmation] = useState(null);
+    const {showToast} = useContext(MyContext);
+    const {logout} = useAuth();
 
     const handleSetIdAndStatus = (data) => {
         setIsModalOpen(true);
@@ -23,7 +27,14 @@ const RecentOrders = () => {
             try {
                 await billService.updateStatus(idOrder, {status: statusOrder});
             } catch (e) {
-                console.error("Error updating status:", e);
+                if (e.response.data.status === 401) {
+                    showToast("error", "Sesi telah habis, silahkan login kembali", 1000);
+                    setTimeout(() => {
+                        logout();
+                    }, 2000)
+                } else {
+                    showToast("error", "Gagal mengubah status pesanan", 1000);
+                }
             }
         };
         changeStatusOrder().then(() => setIsModalOpen(false));

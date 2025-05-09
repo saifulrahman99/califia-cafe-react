@@ -28,6 +28,7 @@ axiosInstance.interceptors.response.use(
             // Token mungkin telah kedaluwarsa, lakukan sesuatu, misalnya logout
             console.log('Token expired or invalid');
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
         }
         return Promise.reject(error);
     }

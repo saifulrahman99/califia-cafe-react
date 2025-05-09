@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 
 import {formatRupiah} from "@/utils/formatCurrency.js";
-import {replaceLocalhostWithServerHost} from "@/utils/repllaceHostLocalToHostServer.js";
+import {replaceLocalhostWithServerHost} from "@/utils/replaceHostLocalToHostServer.js";
 import MenuService from "@services/menuService.js";
 import Ripples from 'react-ripples'
 import NullMenuData from "@shared/components/Error/NullMenuData.jsx";
@@ -33,8 +33,7 @@ const MenuList = () => {
             try {
                 const data = await menuService.getAll({
                     type: type,
-                    sortBy: 'type',
-                    all: true
+                    all: true,
                 });
 
                 // bentuk data baru dari data awal
