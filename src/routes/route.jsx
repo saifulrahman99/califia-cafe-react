@@ -24,13 +24,15 @@ import StoreProfile from "@pages/Admin/Setting/StoreProfile.jsx";
 import Operational from "@pages/Admin/Setting/Operational.jsx";
 import Account from "@pages/Admin/Account/Account.jsx";
 import ProtectedRoute from "@/routes/ProtectedRoute.jsx";
-import MenuLayout from "@pages/Admin/Menu/MenuLayout.jsx";
+import Menu from "@pages/Admin/Menu/Menu.jsx";
 import MenuDetailList from "@pages/Admin/Menu/components/MenuDetailList.jsx";
 import MenuForm from "@pages/Admin/Menu/components/MenuForm.jsx";
 import CategoryList from "@pages/Admin/Category/components/CategoryList.jsx";
 import CategoryForm from "@pages/Admin/Category/components/CategoryForm.jsx";
 import DiscountList from "@pages/Admin/Discount/components/DiscountList.jsx";
 import DiscountForm from "@pages/Admin/Discount/components/DiscountForm.jsx";
+import ToppingList from "@pages/Admin/Topping/components/ToppingList.jsx";
+import ToppingForm from "@pages/Admin/Topping/components/ToppingForm.jsx";
 
 const router = createBrowserRouter([
         {
@@ -93,7 +95,7 @@ const router = createBrowserRouter([
                         },
                         {
                             path: "list",
-                            element: <MenuLayout/>,
+                            element: <Menu/>,
                             children: [
                                 {
                                     index: true,
@@ -153,7 +155,21 @@ const router = createBrowserRouter([
                 },
                 {
                     path: "toppings",
-                    element: <Topping/>
+                    element: <Topping/>,
+                    children: [
+                        {
+                            index: true,
+                            element: <ToppingList/>
+                        },
+                        {
+                            path: "add-topping",
+                            element: <ToppingForm/>
+                        },
+                        {
+                            path: "update-topping/:id",
+                            element: <ToppingForm/>
+                        }
+                    ]
                 },
                 {
                     path: "transactions",
