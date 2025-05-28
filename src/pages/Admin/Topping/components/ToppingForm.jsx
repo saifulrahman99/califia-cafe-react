@@ -99,7 +99,8 @@ const ToppingForm = () => {
                     <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
                         {/* Nama */}
                         <div className="col-span-2">
-                            <label className="block font-semibold mb-2">Nama Topping <span className="text-red-500">*</span></label>
+                            <label className="block font-semibold mb-2">Nama Topping <span
+                                className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 {...register("name")}
@@ -110,21 +111,25 @@ const ToppingForm = () => {
 
                         {/* Tipe */}
                         <div className="col-span-2">
-                            <label className="block font-semibold mb-2">Tipe <span className="text-red-500">*</span></label>
+                            <label className="block font-semibold mb-2">Tipe <span
+                                className="text-red-500">*</span></label>
                             <select
                                 {...register("type")}
                                 className="w-full p-2 border rounded border-slate-300 focus:outline-amber-500"
                             >
                                 <option value="">Pilih tipe</option>
                                 <option value="food">Makanan</option>
-                                <option value="drink">Minuman</option>
+                                <option value="beverage">Minuman</option>
+                                <option value="snack">Snack</option>
                             </select>
                             {errors.type && <p className="text-red-500 text-sm">{errors.type.message}</p>}
                         </div>
 
+
                         {/* Harga */}
                         <div>
-                            <label className="block font-semibold mb-2">Harga (Rp) <span className="text-red-500">*</span></label>
+                            <label className="block font-semibold mb-2">Harga (Rp) <span
+                                className="text-red-500">*</span></label>
                             <input
                                 type="number"
                                 {...register("price")}
@@ -135,7 +140,8 @@ const ToppingForm = () => {
 
                         {/* Stok */}
                         <div>
-                            <label className="block font-semibold mb-2">Stok <span className="text-red-500">*</span></label>
+                            <label className="block font-semibold mb-2">Stok <span
+                                className="text-red-500">*</span></label>
                             <input
                                 type="number"
                                 {...register("stock")}

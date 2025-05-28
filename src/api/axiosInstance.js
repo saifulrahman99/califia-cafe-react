@@ -5,6 +5,7 @@ const axiosInstance = axios.create({
     baseURL: "/api", // Ganti dengan URL API
     headers: {
         Accept: "application/json",
+        "ngrok-skip-browser-warning": "true",
     },
 });
 

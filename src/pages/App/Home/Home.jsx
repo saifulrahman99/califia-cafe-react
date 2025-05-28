@@ -42,8 +42,19 @@ function Home() {
     }, [searchParams]);
 
     useEffect(() => {
-        setOrderType((sessionStorage.getItem("tableNumber") === null || searchParams.get("t") === "") ? "TA" : "DI");
-        setOrderType(sessionStorage.getItem("orderType"));
+        // Cek jika search param "t" kosong atau session "tableNumber" tidak ada/null
+        if (!searchParams.get("t") || sessionStorage.getItem("tableNumber") === null) {
+            setOrderType("TA");
+        } else {
+            setOrderType("DI");
+        }
+
+        // Jika session "orderType" ada, override dengan session value
+        const sessionOrderType = sessionStorage.getItem("orderType");
+        if (sessionOrderType) {
+            setOrderType(sessionOrderType);
+        }
+
         const handleScroll = () => {
             if (window.scrollY > 60) {
                 setScrolling(true); // Ubah warna jika scroll > 50px
@@ -92,13 +103,13 @@ function Home() {
                     <Ripples className={"w-full"}>
                         <Link to={"about"} className={" flex flex-1 justify-between items-center p-4"}>
 
-                        <div className="w-2/3">
-                            <h1 className="text-lg font-bold mb-3 text-primary">Califia | Food & Beverage</h1>
-                            <p className="text-sm text-gray-600">Jam Buka, 08:00 - 21:00</p>
-                        </div>
-                        <div className="w-1/3 flex justify-end">
-                            <ChevronRight strokeWidth={1.5} size={25}/>
-                        </div>
+                            <div className="w-2/3">
+                                <h1 className="text-lg font-bold mb-3 text-primary">Califia | Food & Beverage</h1>
+                                <p className="text-sm text-gray-600">Jam Buka, 08:00 - 21:00</p>
+                            </div>
+                            <div className="w-1/3 flex justify-end">
+                                <ChevronRight strokeWidth={1.5} size={25}/>
+                            </div>
                         </Link>
                     </Ripples>
                 </div>
