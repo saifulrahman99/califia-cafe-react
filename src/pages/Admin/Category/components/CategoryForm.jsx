@@ -5,6 +5,7 @@ import {useForm} from "react-hook-form";
 import {RotateCcw} from "lucide-react";
 import CategoryService from "@services/categoryService.js";
 import {MyContext} from "@/context/MyContext.jsx";
+import AdminLoading from "@shared/components/Loading/AdminLoading.jsx";
 
 const schema = yup.object().shape({
     name: yup.string().required("Nama wajib di isi"),
@@ -20,10 +21,11 @@ const CategoryForm = ({payload, setPayload, setRefresh}) => {
         resolver: yupResolver(schema),
     });
     const categoryService = useMemo(CategoryService, []);
-    const {showToast} = useContext(MyContext);
+    const {showToast, isProcessDataOpen, setIsProcessDataOpen} = useContext(MyContext);
 
     const onSubmit = async (data) => {
         try {
+            setIsProcessDataOpen(!isProcessDataOpen);
             if (Object.keys(payload).length > 0) {
                 await categoryService.update({
                     id: payload.id,
@@ -38,8 +40,11 @@ const CategoryForm = ({payload, setPayload, setRefresh}) => {
             resetHandler();
             setRefresh(prev => !prev);
         } catch (err) {
-            console.log(err)
+            if (err.response.status === 422) {
+                showToast("error", "tidak ada yang dirubah", 1000)
+            }
         }
+        setIsProcessDataOpen(false);
     }
     const resetHandler = () => {
         setPayload({});
@@ -83,6 +88,7 @@ const CategoryForm = ({payload, setPayload, setRefresh}) => {
                     </button>
                 </form>
             </div>
+            <AdminLoading isOpen={isProcessDataOpen} isLoading={true}/>
         </>
     );
 };

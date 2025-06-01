@@ -6,9 +6,10 @@ import {ChartBar, ChevronDown, ChevronUp, CirclePlus, Edit2, Search, Trash} from
 import {NavLink} from "react-router-dom";
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import ConfirmationModalAdmin from "@shared/components/Modal/ConfirmationModalAdmin.jsx";
+import AdminLoading from "@shared/components/Loading/AdminLoading.jsx";
 
 const MenuList = () => {
-    const {isLoading, setIsLoading, showToast} = useContext(MyContext);
+    const {isLoading, setIsLoading, showToast, isProcessDataOpen, setIsProcessDataOpen} = useContext(MyContext);
     const [menus, setMenus] = useState([]);
     const menuService = useMemo(MenuService, []);
     const [q, setQ] = useState(null);
@@ -86,6 +87,7 @@ const MenuList = () => {
         setIdToDelete(id);
     }
     const handleDeleteMenu = async () => {
+        setIsProcessDataOpen(!isProcessDataOpen);
         try {
             await menuService.deleteById(idToDelete);
             showToast("success", "Berhasil menghapus menu", 1000);
@@ -94,6 +96,7 @@ const MenuList = () => {
             showToast("error", "Gagal menghapus menu", 1000);
         }
         setIsModalOpen(false);
+        setIsProcessDataOpen(false);
     }
 
     const handleSort = (data) => {
@@ -283,6 +286,7 @@ const MenuList = () => {
                 title="Hapus Data"
                 message="Apakah Anda yakin hapus data ini?"
             />
+            <AdminLoading isOpen={isProcessDataOpen} isLoading={true}/>
         </>
     );
 };

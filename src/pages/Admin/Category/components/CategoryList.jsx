@@ -6,11 +6,12 @@ import ConfirmationModalAdmin from "@shared/components/Modal/ConfirmationModalAd
 import {capitalizeWords} from "@/utils/capitalWords.js";
 import {Edit2, Search, Trash} from "lucide-react";
 import CategoryForm from "@pages/Admin/Category/components/CategoryForm.jsx";
+import AdminLoading from "@shared/components/Loading/AdminLoading.jsx";
 
 const CategoryList = () => {
     const categoryService = useMemo(CategoryService, []);
     const [categories, setCategories] = useState([]);
-    const {isLoading, setIsLoading, showToast} = useContext(MyContext);
+    const {isLoading, setIsLoading, showToast, isProcessDataOpen, setIsProcessDataOpen} = useContext(MyContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [q, setQ] = useState(null);
     const [idToDelete, setIdToDelete] = useState(null);
@@ -23,14 +24,16 @@ const CategoryList = () => {
         }
     }
     const handleDeleteCategory = async () => {
+        setIsProcessDataOpen(!isProcessDataOpen);
         try {
             await categoryService.deleteById(idToDelete);
-            showToast("success", "Berhasil menghapus categori", 1000);
+            showToast("success", "Berhasil menghapus kategori", 1000);
             setRefresh(prev => !prev)
         } catch {
-            showToast("error", "Gagal menghapus categori", 1000);
+            showToast("error", "Gagal menghapus kategori", 1000);
         }
         setIsModalOpen(false);
+        setIsProcessDataOpen(false);
     }
     const handleOpenConfirmationModal = (id) => {
         setIsModalOpen(!isModalOpen);
@@ -137,7 +140,7 @@ const CategoryList = () => {
                 title="Hapus Data"
                 message="Apakah Anda yakin hapus data ini?"
             />
-
+            <AdminLoading isOpen={isProcessDataOpen} isLoading={true}/>
         </>
     );
 };

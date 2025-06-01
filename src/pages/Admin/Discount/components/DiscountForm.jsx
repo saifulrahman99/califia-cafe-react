@@ -66,14 +66,14 @@ const DiscountForm = () => {
         try {
             if (isEditMode) {
                 await discountService.update(payload);
-                showToast("success", "Berhasil mengupdate data");
+                showToast("success", "Berhasil mengupdate data", 1000);
             } else {
                 await discountService.create(payload);
-                showToast("success", "Berhasil menambahkan data");
+                showToast("success", "Berhasil menambahkan data", 1000);
             }
             navigate("../");
         } catch {
-            showToast("error", "Gagal menyimpan data");
+            showToast("error", "Gagal menyimpan data", 1000);
         } finally {
             setIsLoading(false);
             setIsOpen(false);
@@ -166,7 +166,7 @@ const DiscountForm = () => {
                                         />
                                         <span
                                             className="absolute inset-y-0 start-0 m-1 size-4 rounded-full bg-white transition-[inset-inline-start] peer-checked:start-6"></span>
-                                     </label>
+                                    </label>
                                 )}
                             />
                         </div>

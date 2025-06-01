@@ -65,6 +65,13 @@ const BillStatus = () => {
                                     <p>Pesanan sudah dikonfirmasi, sialahkan menunggu pesanan anda.</p>
                                 </>
                             )}
+                            {bill.status === "paid" && (
+                                <>
+                                    <Lottie animationData={success} loop={false} className="w-[50%] m-auto"/>
+                                    <h1 className="font-bold text-xl mb-4">Pesanan Sudah Dibayar</h1>
+                                    <p>Pesanan sudah dibayar, terimakasih sudah memesan.</p>
+                                </>
+                            )}
                         </div>
 
                         <div
@@ -86,7 +93,7 @@ const BillStatus = () => {
                                 <span className="block font-semibold">{formatRupiah(bill.final_price)}</span>
                             </div>
                         </div>
-                        {bill.status === "confirm" &&
+                        {(bill.status === "confirm" || bill.status === "paid") &&
                             <div className="w-full mx-auto max-w-md md:max-w-lg text-center">
                                 <button
                                     onClick={handleToSetEmptyCart}

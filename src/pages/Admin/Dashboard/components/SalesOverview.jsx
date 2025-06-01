@@ -7,7 +7,7 @@ import BillService from "@services/billService.js";
 // Register required Chart.js components
 ChartJS.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip, Legend);
 
-const SalesOverview = () => {
+const SalesOverview = ({refresh}) => {
     const billService = useMemo(() => BillService(), []);
     const chartRef = useRef(null);
     const canvasRef = useRef(null);
@@ -84,7 +84,7 @@ const SalesOverview = () => {
         return () => {
             isMounted = false;
         };
-    }, [billService]);
+    }, [billService, refresh]);
 
     // Chart initialization and update effect
     useEffect(() => {
@@ -134,7 +134,7 @@ const SalesOverview = () => {
                 chartRef.current = null;
             }
         };
-    }, [chartData]);
+    }, [chartData, refresh]);
 
     return (
         <div className="w-full max-w-4xl mx-auto p-4">

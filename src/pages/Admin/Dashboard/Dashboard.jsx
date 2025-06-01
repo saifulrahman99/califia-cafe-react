@@ -1,13 +1,16 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import RecentOrders from "@pages/Admin/Dashboard/components/RecentOrders.jsx";
 import BillService from "@services/billService.js";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import LowStock from "@pages/Admin/Dashboard/components/LowStock.jsx";
 import SalesOverview from "@pages/Admin/Dashboard/components/SalesOverview.jsx";
+import {MyContext} from "@/context/MyContext.jsx";
 
 const Dashboard = () => {
     const [orders, setOrders] = useState([]);
+    const {showToast} = useContext(MyContext);
     const billService = useMemo(() => BillService(), []);
+    const [refresh, setRefresh] = useState(false);
     const getTotalOrders = (data) => data.length;
 
     const getProductSold = (data) => {
@@ -35,12 +38,12 @@ const Dashboard = () => {
             try {
                 const response = await billService.getAll({status: "paid", paging: 0});
                 setOrders(response.data.data);
-            } catch (error) {
-                console.log(error);
+            } catch {
+                showToast("error", "gagal memuat data", 1000);
             }
         }
         getOrders();
-    }, [billService]);
+    }, [billService, refresh]);
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
@@ -64,15 +67,15 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 md:gap-2 gap-y-2 my-4">
                 <div className="border border-slate-200 col-span-2 p-4 bg-white rounded">
-                    <RecentOrders/>
+                    <RecentOrders refresh={refresh} setRefresh={setRefresh}/>
                 </div>
                 <div className="border border-slate-200 col-span-1 p-4 bg-white rounded w-full">
-                    <LowStock/>
+                    <LowStock refresh={refresh}/>
                 </div>
             </div>
 
             <div className="border border-slate-200 p-4 bg-white rounded">
-                <SalesOverview/>
+                <SalesOverview refresh={refresh}/>
             </div>
 
         </>

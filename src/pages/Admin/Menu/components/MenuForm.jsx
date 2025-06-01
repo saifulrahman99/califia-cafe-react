@@ -98,10 +98,6 @@ const MenuForm = () => {
         if (data.image !== null) form.append("image", data.image[0]);
         if (isEditMode) form.append('_method', 'PUT');
 
-        for (const [key, value] of form.entries()) {
-            console.log(`${key}:`, value);
-        }
-
         setIsLoading(!isLoading);
         setIsOpen(!isOpen);
         try {

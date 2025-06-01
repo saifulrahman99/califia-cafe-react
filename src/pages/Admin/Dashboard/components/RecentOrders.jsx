@@ -4,15 +4,16 @@ import ConfirmationModalAdmin from "@shared/components/Modal/ConfirmationModalAd
 import {subscribeToChannel} from "@/pusher/pusher.js";
 import {MyContext} from "@/context/MyContext.jsx";
 import {useAuth} from "@/context/AuthContext.jsx";
+import AdminLoading from "@shared/components/Loading/AdminLoading.jsx";
 
-const RecentOrders = () => {
+const RecentOrders = ({refresh, setRefresh}) => {
     const [orders, setOrders] = useState([]);
     const billService = useMemo(() => BillService(), []);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [idOrder, setIdOrder] = useState(null);
     const [statusOrder, setStatusOrder] = useState(null);
     const [titleConfirmation, setTitleConfirmation] = useState(null);
-    const {showToast} = useContext(MyContext);
+    const {showToast, isProcessDataOpen, setIsProcessDataOpen} = useContext(MyContext);
     const {logout} = useAuth();
 
     const handleSetIdAndStatus = (data) => {
@@ -24,8 +25,9 @@ const RecentOrders = () => {
 
     const handleChangeBillStatus = () => {
         const changeStatusOrder = async () => {
+            setIsProcessDataOpen(!isProcessDataOpen);
             try {
-                await billService.updateStatus(idOrder, {status: statusOrder});
+                return await billService.updateStatus(idOrder, {status: statusOrder});
             } catch (e) {
                 if (e.response.data.status === 401) {
                     showToast("error", "Sesi telah habis, silahkan login kembali", 1000);
@@ -37,7 +39,13 @@ const RecentOrders = () => {
                 }
             }
         };
-        changeStatusOrder().then(() => setIsModalOpen(false));
+        changeStatusOrder().then((data) => {
+            if (data.data.status === "paid") {
+                setRefresh(!refresh);
+            }
+            setIsModalOpen(false)
+            setIsProcessDataOpen(false)
+        });
     };
 
     useEffect(() => {
@@ -179,6 +187,7 @@ const RecentOrders = () => {
                 title={titleConfirmation}
                 message="Apakah Anda yakin?"
             />
+            <AdminLoading isOpen={isProcessDataOpen} isLoading={true}/>
         </div>
     );
 };

@@ -7,6 +7,7 @@ export const MyContext = createContext();
 export const MyProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [cart, setCart] = useState([]);
+    const [isProcessDataOpen, setIsProcessDataOpen] = useState(false);
 
     const addToCart = (menu, toppings = []) => {
         setCart(prevCart => {
@@ -172,7 +173,9 @@ export const MyProvider = ({children}) => {
             updateNote,
             showToast,
             addDirectToppingToMenu,
-            mergeCartItems
+            mergeCartItems,
+            isProcessDataOpen,
+            setIsProcessDataOpen,
         }}>
             {children}
         </MyContext.Provider>

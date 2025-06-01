@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import MenuService from "@services/menuService.js";
 
-const LowStock = () => {
+const LowStock = ({refresh}) => {
     const menuService = useMemo(() => MenuService(), [])
     const [menus, setMenus] = useState([])
     const getLowStockMenu = (menus) => {
@@ -16,7 +16,7 @@ const LowStock = () => {
             setMenus(getLowStockMenu(response.data.data))
         }
         getMenus()
-    }, [menuService])
+    }, [menuService, refresh])
     return (
         <>
             <div className="overflow-x-auto">

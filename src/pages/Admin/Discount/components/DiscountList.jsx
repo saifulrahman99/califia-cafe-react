@@ -8,11 +8,12 @@ import {CirclePlus, Edit2, Search, Trash} from "lucide-react";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import {formatDate} from "@/utils/formatDate.js";
 import {formatHour} from "@/utils/formatHour.js";
+import AdminLoading from "@shared/components/Loading/AdminLoading.jsx";
 
 const DiscountList = () => {
     const discountService = useMemo(DiscountService, []);
     const [discounts, setDiscounts] = useState([]);
-    const {isLoading, setIsLoading, showToast} = useContext(MyContext);
+    const {isLoading, setIsLoading, showToast, isProcessDataOpen, setIsProcessDataOpen} = useContext(MyContext);
     const [q, setQ] = useState('');
     const [idToAction, setIdToAction] = useState(null);
     const [refresh, setRefresh] = useState(false);
@@ -36,9 +37,10 @@ const DiscountList = () => {
             title: action === 'delete' ? 'Hapus Data' : 'Ubah Diskon',
             message: action === 'delete' ? 'Apakah Anda yakin hapus data ini?' : 'Apakah Anda yakin mengubah sttaus diskon ini?'
         });
-        setIsDelete(action === 'delete' ? true : false);
+        setIsDelete(action === 'delete');
     }
     const handleDeleteDiscount = async () => {
+        setIsProcessDataOpen(!isProcessDataOpen);
         try {
             await discountService.deleteById(idToAction);
             showToast("success", "Berhasil menghapus diskon", 1000);
@@ -47,17 +49,20 @@ const DiscountList = () => {
             showToast("error", "Gagal menghapus diskon", 1000);
         }
         setIsModalOpen(false);
+        setIsProcessDataOpen(false);
     }
 
     const handleUpdateStatusDiscount = async () => {
+        setIsProcessDataOpen(!isProcessDataOpen);
         try {
             await discountService.updateStatus(idToAction);
             showToast("success", "Berhasil mengubah status diskon", 1000);
-            setRefresh(prev => !prev)
         } catch {
             showToast("error", "Gagal mengubah status diskon", 1000);
         }
+        setRefresh(prev => !prev)
         setIsModalOpen(false);
+        setIsProcessDataOpen(false);
     }
     useEffect(() => {
         setIsLoading(!isLoading);
@@ -201,6 +206,7 @@ const DiscountList = () => {
                 title={modalMessage.title}
                 message={modalMessage.message}
             />
+            <AdminLoading isOpen={isProcessDataOpen} isLoading={true}/>
         </>
     );
 };

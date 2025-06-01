@@ -30,6 +30,7 @@ axiosInstance.interceptors.response.use(
             console.log('Token expired or invalid');
             localStorage.removeItem('token');
             localStorage.removeItem('user');
+            window.location.reload();
         }
         return Promise.reject(error);
     }
