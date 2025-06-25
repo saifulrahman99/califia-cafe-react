@@ -97,7 +97,7 @@ const ToppingList = () => {
 
                 <div
                     className="overflow-x-auto overflow-y-auto min-h-[20rem] h-[30rem] max-w-[100vw] thin-scrollbar py-4">
-                    <table className="w-full divide-y divide-gray-200">
+                    <table className="w-full divide-y divide-gray-200 text-slate-600">
                         <thead className="bg-gray-200">
                         <tr>
                             <th className="px-4 py-2 text-xs text-left uppercase tracking-wider text-gray-600">No</th>

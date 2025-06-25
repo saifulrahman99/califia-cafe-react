@@ -19,7 +19,7 @@ import MenuList from "@pages/Admin/Menu/components/MenuList.jsx";
 import Discount from "@pages/Admin/Discount/Discount.jsx";
 import Category from "@pages/Admin/Category/Category.jsx";
 import Topping from "@pages/Admin/Topping/Topping.jsx";
-import Transaction from "@pages/Admin/Transaction/Transaction.jsx";
+import Bill from "@pages/Admin/Bill/Bill.jsx";
 import StoreProfile from "@pages/Admin/Setting/StoreProfile.jsx";
 import Operational from "@pages/Admin/Setting/Operational.jsx";
 import Account from "@pages/Admin/Account/Account.jsx";
@@ -33,6 +33,7 @@ import DiscountList from "@pages/Admin/Discount/components/DiscountList.jsx";
 import DiscountForm from "@pages/Admin/Discount/components/DiscountForm.jsx";
 import ToppingList from "@pages/Admin/Topping/components/ToppingList.jsx";
 import ToppingForm from "@pages/Admin/Topping/components/ToppingForm.jsx";
+import BillList from "@pages/Admin/Bill/components/BillList.jsx";
 
 const router = createBrowserRouter([
         {
@@ -173,7 +174,13 @@ const router = createBrowserRouter([
                 },
                 {
                     path: "transactions",
-                    element: <Transaction/>
+                    element: <Bill/>,
+                    children: [
+                        {
+                            index: true,
+                            element: <BillList/>,
+                        }
+                    ]
                 },
                 {
                     path: "settings",

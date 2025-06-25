@@ -34,7 +34,7 @@ const AboutMe = () => {
             <div className="pt-12.5">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d247.0861156738108!2d114.22171891589733!3d-7.74968686741168!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd12a097913b303%3A0x602d2c84f06267e0!2s762C%2B5MH%2C%20Gudang%2C%20Kec.%20Asembagus%2C%20Kabupaten%20Situbondo%2C%20Jawa%20Timur%2068373!5e0!3m2!1sid!2sid!4v1743104958400!5m2!1sid!2sid"
-                    height="250" allowFullScreen="true" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+                    height="250" allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                     className={"w-full border-0"}></iframe>
                 <div className="content px-4 pb-8 border-b-slate-200 border-2 border-x-0 border-t-0">
                     <h1 className={"text-primary text-2xl font-bold mt-2 mb-4"}>Califia | Food & Baverage</h1>

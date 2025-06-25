@@ -20,13 +20,10 @@ function Home() {
         if (e.target.value === "DI" && (sessionStorage.getItem("tableNumber") === null || searchParams.get("t") === "")) {
             setIsOpen(true);
             const codeReader = new BrowserMultiFormatReader();
-            codeReader.decodeFromVideoDevice(undefined, "video", (res, err) => {
+            codeReader.decodeFromVideoDevice(undefined, "video", (res) => {
                 if (res) {
                     window.location.href = res.text; // Redirect ke link
                 }
-                if (err) console.error(err);
-            }).then((r) => {
-                console.log(r)
             });
 
             return () => codeReader.reset();
@@ -104,7 +101,7 @@ function Home() {
                         <Link to={"about"} className={" flex flex-1 justify-between items-center p-4"}>
 
                             <div className="w-2/3">
-                                <h1 className="text-lg font-bold mb-3 text-primary">Califia | Food & Beverage</h1>
+                                <h1 className="text-md md:text-lg font-bold mb-3 text-primary">Califia | Food & Beverage</h1>
                                 <p className="text-sm text-gray-600">Jam Buka, 08:00 - 21:00</p>
                             </div>
                             <div className="w-1/3 flex justify-end">
@@ -123,7 +120,7 @@ function Home() {
                             id="OrderType"
                             value={orderType}
                             onChange={handleOrderTypeChange}
-                            className="border border-slate-300 text-slate-800 font-semibold px-5 py-1 rounded-lg text-xs hover:cursor-pointer focus:outline-none"
+                            className="border border-slate-300 text-slate-800 font-semibold px-5 py-1 rounded-lg text-sm hover:cursor-pointer focus:outline-none"
                         >
                             <option value="TA">Take Away</option>
                             <option value="DI">Dine-In</option>
@@ -178,6 +175,13 @@ function Home() {
                             {/* Message */}
                             <p className="my-2 text-gray-600">Silahkan Arahkan Kamera Ke Kode QR</p>
                             <video id="video" className="w-full h-min-60"/>
+
+                            <div className="text-center mt-4">
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    className="bg-primary btn-primary py-2 px-6 rounded font-semibold text-white cursor-pointer text-lg">Batal
+                                </button>
+                            </div>
                         </Dialog.Panel>
                     </Transition.Child>
                 </Dialog>

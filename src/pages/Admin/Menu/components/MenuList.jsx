@@ -57,7 +57,7 @@ const MenuList = () => {
 
         // Previous dan Next
         const prevLink = {
-            label: '« Previous',
+            label: '« Prev',
             url: currentPage > 1 ? String(currentPage - 1) : null,
             active: false,
         };
@@ -78,10 +78,11 @@ const MenuList = () => {
         setPerPage(e.target.value);
     }
     const handleSearch = (e) => {
-        if (e.key === 'Enter') {
-            setQ(e.target.value);
+        if (e.key === "Enter") {
+            setQ(e.target.value)
+            setPage(1);
         }
-    }
+    };
     const handleOpenConfirmationModal = (id) => {
         setIsModalOpen(!isModalOpen);
         setIdToDelete(id);
@@ -258,9 +259,9 @@ const MenuList = () => {
                         </tbody>
                     </table>
                 </div>
-                <div className="paging flex justify-between px-4 pb-4 flex-col md:flex-row">
+                <div className="paging flex justify-between px-4 pb-4 flex-col md:flex-row text-sm">
                     <div className="page-label">
-                        {paging.current_page} / {paging.last_page}
+                        Halaman {paging.current_page} dari {paging.last_page}
                     </div>
                     <div className="page-nav">
                         <ul className="flex justify-center gap-1 text-gray-900">

@@ -5,12 +5,15 @@ import {formatRupiah} from "@/utils/formatCurrency.js";
 import LowStock from "@pages/Admin/Dashboard/components/LowStock.jsx";
 import SalesOverview from "@pages/Admin/Dashboard/components/SalesOverview.jsx";
 import {MyContext} from "@/context/MyContext.jsx";
+import {getDateRange} from "@/utils/getDateRange.js";
 
 const Dashboard = () => {
     const [orders, setOrders] = useState([]);
     const {showToast} = useContext(MyContext);
     const billService = useMemo(() => BillService(), []);
     const [refresh, setRefresh] = useState(false);
+    const [reportRange, setReportRange] = useState("Month");
+
     const getTotalOrders = (data) => data.length;
 
     const getProductSold = (data) => {
@@ -33,19 +36,36 @@ const Dashboard = () => {
         return orders > 0 ? revenue / orders : 0;
     };
 
+    const handleChangeReportRange = (e) => {
+        setReportRange(e.target.value);
+    }
+
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const response = await billService.getAll({status: "paid", paging: 0});
+                const response = await billService.getAll({
+                    status: "paid",
+                    paging: 0,
+                    startDate: getDateRange((reportRange === "Month") && new Date().getMonth() + 1, new Date().getFullYear()).start_date,
+                    endDate: getDateRange((reportRange === "Month") && new Date().getMonth() + 1, new Date().getFullYear()).end_date,
+                });
                 setOrders(response.data.data);
             } catch {
                 showToast("error", "gagal memuat data", 1000);
             }
         }
         getOrders();
-    }, [billService, refresh]);
+    }, [billService, refresh, reportRange]);
     return (
         <>
+            <select
+                className="border border-slate-200 px-2 py-1 rounded-md mb-2 bg-white focus:outline-0"
+                onChange={handleChangeReportRange}
+            >
+                <option value="Month">Bulan Ini</option>
+                <option value="Year">Tahun Ini</option>
+            </select>
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
                 <div className="p-4 bg-white border border-slate-200 rounded">
                     <span className={"font-semibold"}>Pesanan Selesai</span>
