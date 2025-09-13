@@ -15,22 +15,40 @@ function Home() {
     const [scrolling, setScrolling] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [tableNumber, setTableNumber] = useState(sessionStorage.getItem("tableNumber"));
+    const codeReader = new BrowserMultiFormatReader();
 
     const handleOrderTypeChange = (e) => {
-        if (e.target.value === "DI" && (sessionStorage.getItem("tableNumber") === null || searchParams.get("t") === "")) {
-            setIsOpen(true);
-            const codeReader = new BrowserMultiFormatReader();
+        if (
+            e.target.value === "DI" &&
+            (sessionStorage.getItem("tableNumber") === null ||
+                searchParams.get("t") === "")
+        ) {
+            setIsOpen(true); // buka kamera
+        }
+        setOrderType(e.target.value);
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            // nyalakan kamera
             codeReader.decodeFromVideoDevice(undefined, "video", (res) => {
                 if (res) {
-                    window.location.href = res.text; // Redirect ke link
+                    window.location.href = res.getText();
                 }
             });
-
-            return () => codeReader.reset();
         }
-        sessionStorage.setItem("orderType", e.target.value);
-        setOrderType(e.target.value);
-    }
+
+        return () => {
+            // matikan kamera saat modal ditutup / komponen unmount
+            const videoElement = document.getElementById("video");
+            if (videoElement && videoElement.srcObject) {
+                const stream = videoElement.srcObject;
+                const tracks = stream.getTracks();
+                tracks.forEach((track) => track.stop()); // ini yang mematikan kamera
+                videoElement.srcObject = null;
+            }
+        };
+    }, [isOpen]);
 
     useEffect(() => {
         const tableNum = searchParams.get("t");
@@ -42,14 +60,10 @@ function Home() {
         // Cek jika search param "t" kosong atau session "tableNumber" tidak ada/null
         if (!searchParams.get("t") || sessionStorage.getItem("tableNumber") === null) {
             setOrderType("TA");
+            sessionStorage.setItem("orderType", "TA");
         } else {
             setOrderType("DI");
-        }
-
-        // Jika session "orderType" ada, override dengan session value
-        const sessionOrderType = sessionStorage.getItem("orderType");
-        if (sessionOrderType) {
-            setOrderType(sessionOrderType);
+            sessionStorage.setItem("orderType", "DI");
         }
 
         const handleScroll = () => {
@@ -101,7 +115,8 @@ function Home() {
                         <Link to={"about"} className={" flex flex-1 justify-between items-center p-4"}>
 
                             <div className="w-2/3">
-                                <h1 className="text-md md:text-lg font-bold mb-3 text-primary">Califia | Food & Beverage</h1>
+                                <h1 className="text-md md:text-lg font-bold mb-3 text-primary">Califia | Food &
+                                    Beverage</h1>
                                 <p className="text-sm text-gray-600">Jam Buka, 08:00 - 21:00</p>
                             </div>
                             <div className="w-1/3 flex justify-end">

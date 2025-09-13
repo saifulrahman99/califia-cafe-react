@@ -131,6 +131,21 @@ export const MyProvider = ({children}) => {
         });
     };
 
+    // Hitung total qty menu tertentu di cart
+    const getMenuQtyInCart = (menuId) => {
+        return cart
+            .filter(item => item.menuId === menuId)
+            .reduce((sum, item) => sum + item.qty, 0);
+    };
+
+    // Hitung total qty topping tertentu di seluruh cart (global)
+    const getToppingQtyInCart = (toppingId) => {
+        return cart.reduce((sum, item) => {
+            const topping = item.toppings.find(t => t.id === toppingId);
+            return sum + (topping ? topping.qty * item.qty : 0);
+        }, 0);
+    };
+
     const showToast = (type, message, duration) => {
         const options = {
             position: "top-center",
@@ -176,6 +191,8 @@ export const MyProvider = ({children}) => {
             mergeCartItems,
             isProcessDataOpen,
             setIsProcessDataOpen,
+            getMenuQtyInCart,
+            getToppingQtyInCart
         }}>
             {children}
         </MyContext.Provider>

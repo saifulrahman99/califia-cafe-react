@@ -1,18 +1,25 @@
 import React, {useContext, useEffect, useMemo, useState} from "react";
 import {MyContext} from "@/context/MyContext.jsx";
-import {Search, ChevronDown, ChevronUp, Eye, ChartBar} from "lucide-react";
+import {Search, ChevronDown, ChevronUp, Eye, ChartBar, PrinterIcon} from "lucide-react";
 import {formatRupiah} from "@/utils/formatCurrency.js";
 import BillService from "@services/billService.js";
-import Modal from "@/shared/components/Modal/Modal.jsx";
+import Modal from "@/shared/components/Modal/Modal.jsx"; // pastikan Anda punya komponen Modal
 import {formatDate} from "@/utils/formatDate.js";
 import {formatHour} from "@/utils/formatHour.js";
 import {Link} from "react-router-dom";
-import {capitalizeWords} from "@/utils/capitalWords.js"; // pastikan Anda punya komponen Modal
+import {capitalizeWords} from "@/utils/capitalWords.js";
+import {connectToPrinter} from "@/utils/connectToPrinter.js";
+import ReceiptTemplate from "@shared/components/Bill/ReceiptTemplate.jsx";
+import {render} from "react-thermal-printer";
+import {logoCafe} from "@/utils/logoCafe.js";
+import {logoInstagram} from "@/utils/logoInstagram.js";
+import {logoTiktok} from "@/utils/logoTiktok.js";
 
 const TransactionList = () => {
     const {
         isLoading,
         setIsLoading,
+        showToast,
     } = useContext(MyContext);
 
     const [transactions, setTransactions] = useState([]);
@@ -26,6 +33,7 @@ const TransactionList = () => {
 
     const [selectedBill, setSelectedBill] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [device, setDevice] = useState(null);
 
     const handlePaginationData = (meta) => {
         const currentPage = meta.current_page;
@@ -107,6 +115,31 @@ const TransactionList = () => {
         }
     };
 
+    const handleToConnectThePrinter = () => {
+        connectToPrinter(setDevice).then((response) => {
+            if (response) {
+                showToast("success", "Berhasil Terhubung", 1000)
+            } else {
+                showToast("error", "gagal terhubung", 1000);
+            }
+        });
+    }
+
+    const handlePrint = async () => {
+        if (!device) return showToast("warning", "Hubungkan printer terlebih dahulu", 1000);
+        if (!selectedBill || selectedBill.status !== 'paid') return showToast("warning", 'Bill belum dibayar', 1000);
+
+        try {
+            const receipt = <ReceiptTemplate bill={selectedBill}/>;
+            const data = await render(receipt);
+            await device.transferOut(1, data);
+            showToast("success", "Cetak berhasil", 1000);
+        } catch (err) {
+            console.error(err);
+            showToast("error", "Gagal mencetak", 1000);
+        }
+    };
+
     useEffect(() => {
         const fetchTransactions = async () => {
             setIsLoading(true);
@@ -130,6 +163,13 @@ const TransactionList = () => {
 
     return (
         <div className="px-4 py-2 rounded bg-white border border-slate-200">
+            <div className="flex">
+                <button
+                    onClick={handleToConnectThePrinter}
+                    className="text-amber-500 flex items-center gap-1 cursor-pointer border shadow px-2 py-1 rounded-lg hover:bg-amber-500 hover:text-white">Connect
+                    To Printer
+                </button>
+            </div>
             <div className="flex items-center justify-between mt-2">
                 <select onChange={handlePageChange} className="p-1 px-2 rounded-lg border-2 border-slate-300">
                     <option value="10">10</option>
@@ -234,47 +274,82 @@ const TransactionList = () => {
             {/* Modal Invoice Preview */}
             {isModalOpen && selectedBill && (
                 <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}
-                       title={`Invoice ${selectedBill.invoice_no}`}>
-                    <div className="space-y-2">
-                        <div><span className="font-semibold">Customer:</span> {selectedBill.customer_name}</div>
-                        <div><span
-                            className="font-semibold">Order:</span> {selectedBill.order_type === "DI" ? "Dine-in" : "Take Away"}
+                       title={`Invoice`}>
+                    <div
+                        className="font-mono border-dotted border-2 p-2 text-xs md:text-lg md:p-4 tracking-tighter max-h-150 overflow-y-auto">
+                        <img src={logoCafe()} alt="logo cafe" className={'max-w-[50%] mx-auto my-2'}/>
+                        <p className="text-center">Jl. Raya Banyuwangi No. 67, Gudang, Asembagus, Situbondo, Jawa Timur,
+                            68373 </p>
+                        <p className="text-center mb-2">085735717592</p>
+                        <div className="flex justify-between">
+                            <span>{formatDate(selectedBill.trans_date)}</span>
+                            <span>{formatHour(selectedBill.trans_date)}</span>
                         </div>
-                        {selectedBill.order_type === "DI" &&
-                            <div><span className="font-semibold">Meja:</span> {selectedBill.table}</div>}
-                        <div>
-                            <span
-                                className="font-semibold">Tanggal:</span> {formatDate(selectedBill.trans_date)}, {formatHour(selectedBill.trans_date)}
+                        <div>{selectedBill.invoice_no}</div>
+                        <div className="flex justify-between">
+                            <span>Customer</span>
+                            <span>{selectedBill.customer_name}</span>
                         </div>
-                        <div className="border-t pt-2 mt-2">
-                            <span className="font-semibold">Pesanan:</span>
-                            <ul className="list-disc list-inside">
-                                {selectedBill.bill_details.map((item, idx) => (
-                                    <li key={idx} className="mb-1">
-                                        <span
-                                            className="font-semibold">{capitalizeWords(item.menu.name)}</span> x{item.qty}
-                                        <span
-                                            className="float-end">{formatRupiah(item.total_price)}</span>
-                                        {item.bill_detail_toppings.length > 0 && (
-                                            <ul className="ml-4 list-['+'] list-inside">
-                                                {item.bill_detail_toppings.map((top, i) => (
-                                                    <li key={i}
-                                                        className="mb-1"><span
-                                                        className="font-semibold"> {capitalizeWords(top.topping.name)}</span> x{top.qty}
-                                                        <span
-                                                            className="float-end">{formatRupiah(top.price)}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
+
+                        <div className="flex justify-between">
+                            <span>Order</span>
+                            <span>
+                            {selectedBill.order_type === "DI" ? "Dine-in" : "Take Away"}
+                                {selectedBill.order_type === "DI" &&
+                                    <>{` (${selectedBill.table})`}</>}
+                            </span>
                         </div>
-                        <div className="border-t pt-2 font-bold text-right">
+
+                        <div></div>
+                        <div className="border-t-2 border-dotted pt-2 mt-2">
+                            <span className="">Pesanan:</span>
+
+                            {selectedBill.bill_details.map((item, idx) => (
+                                <div key={idx} className="mb-2 border-b-2 border-dotted">
+                                    <div className="text-wrap">{capitalizeWords(item.menu.name)}</div>
+                                    <div className="flex justify-between">
+                                        <span>x{item.qty} {formatRupiah(item.price)}{item.discount_price > 0 && `(-${formatRupiah(item.discount_price)})`}</span>
+                                        <span>{formatRupiah(item.total_price)}</span>
+                                    </div>
+
+                                    <div className="clear-both"></div>
+                                    {item.bill_detail_toppings.length > 0 && (
+                                        <ul className="ml-4 list-['+'] list-inside">
+                                            {item.bill_detail_toppings.map((top, i) => (
+                                                <li key={i}
+                                                    className="mb-1"><span
+                                                    className=""> {capitalizeWords(top.topping.name)}</span> x{top.qty}
+                                                    <span
+                                                        className="float-end">{formatRupiah(top.price)}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="py-2 text-right mb-4 border-b-2 border-dotted">
                             Total: {formatRupiah(selectedBill.final_price)}
                         </div>
+
+                        <div className="flex gap-x-2 items-center">
+                            <img src={logoInstagram()} alt="logo instagram" className={'max-w-3 md:max-w-4'}/>
+                            <span>Califiasfood</span>
+                        </div>
+                        <div className="flex gap-x-2 items-center mb-2">
+                            <img src={logoTiktok()} alt="logo tiktok" className={'max-w-3 md:max-w-4'}/>
+                            <span>Califiasfood</span>
+                        </div>
                     </div>
+
+                    {selectedBill.status === "paid" &&
+                        <div className="button mt-4">
+                            <button
+                                onClick={handlePrint}
+                                className="print cursor-pointer bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-600 flex mx-auto gap-x-2 items-center">
+                                <PrinterIcon size={18}/> Print
+                            </button>
+                        </div>}
                 </Modal>
             )}
         </div>

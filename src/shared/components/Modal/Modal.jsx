@@ -33,23 +33,21 @@ const Modal = ({isOpen, onClose, title, children}) => {
                     leaveFrom="opacity-100 scale-100"
                     leaveTo="opacity-0 scale-95"
                 >
-                    <Dialog.Panel className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative z-1 text-gray-600">
+                    <Dialog.Panel
+                        className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative z-1 text-gray-600">
+                        <button
+                            className="p-1 m-2 hover:bg-slate-200 rounded-full transition hover: cursor-pointer absolute end-0 top-0"
+                            onClick={onClose}
+                        >
+                            <X/>
+                        </button>
                         {/* Title */}
-                        <Dialog.Title className="text-lg font-bold">
+                        <Dialog.Title className="text-lg font-bold mb-3">
                             {title}
                         </Dialog.Title>
 
                         {children}
 
-                        {/* Buttons */}
-                        <div className="mt-4 flex justify-end space-x-2">
-                            <button
-                                className="px-4 py-2 text-white bg-gray-400 rounded-md hover:bg-gray-500 transition hover: cursor-pointer"
-                                onClick={onClose}
-                            >
-                                Close
-                            </button>
-                        </div>
                     </Dialog.Panel>
                 </Transition.Child>
             </Dialog>

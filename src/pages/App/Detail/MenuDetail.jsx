@@ -17,13 +17,25 @@ const MenuDetail = () => {
     const [menu, setMenu] = useState({});
     const [toppings, setToppings] = useState([]);
     const navigate = useNavigate();
-    const {addToCart, isLoading, setIsLoading, showToast} = useContext(MyContext);
+    const {
+        addToCart,
+        isLoading,
+        setIsLoading,
+        showToast,
+        getMenuQtyInCart,
+        getToppingQtyInCart
+    } = useContext(MyContext);
     const [realPrice, setRealPrice] = useState(0);
     const [menuQty, setMenuQty] = useState(1);
     const [orderTotalPrice, setOrderTotalPrice] = useState(0);
     const [toppingCarts, setToppingCarts] = useState([]);
     const [note, setNote] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
+    const remainingMenuStock = menu.stock - getMenuQtyInCart(id);
+
+    const getRemainingToppingStock = (topping) => {
+        return topping.stock - getToppingQtyInCart(topping.id);
+    };
 
     const handleAddToCart = () => {
         addToCart({
@@ -143,8 +155,8 @@ const MenuDetail = () => {
 
             {isLoading ? <MenuDetailSkeleton/> :
                 <>
-                    <div className={`content pb-40 select-none relative z-1 ${menu.stock < 1 && "grayscale"}`}>
-                        {menu.stock < 1 && <div className="absolute inset-0 z-1"></div>}
+                    <div className={`content pb-40 select-none relative z-1 ${remainingMenuStock < 1 && "grayscale"}`}>
+                        {remainingMenuStock < 1 && <div className="absolute inset-0 z-1"></div>}
                         <div className="image aspect-video overflow-hidden flex flex-col justify-center items-center">
                             <img src={replaceLocalhostWithServerHost(menu.image)} alt={menu.name} className="w-full"/>
                         </div>
@@ -218,7 +230,7 @@ const MenuDetail = () => {
                                                                     setOrderTotalPrice(orderTotalPrice + (1 * topping.price))
                                                                 }}
                                                                 type="button"
-                                                                disabled={itemQty >= topping.stock}
+                                                                disabled={itemQty >= getRemainingToppingStock(topping)}
                                                                 className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 active:bg-slate-200 ${itemQty < topping.stock ? 'cursor-pointer' : 'cursor-no-drop'}`}>
                                                                 <PlusIcon strokeWidth={1.5} size={16}/>
                                                             </button>
@@ -226,7 +238,7 @@ const MenuDetail = () => {
                                                     </div>
                                                 ) : (
                                                     <>
-                                                        {topping.stock < 1 ?
+                                                        {getRemainingToppingStock(topping) < 1 ?
                                                             <span
                                                                 className="text-slate-500 font-semibold text-xs"> Habis</span> :
                                                             <button
@@ -274,7 +286,7 @@ const MenuDetail = () => {
                                     />
                                     <button
                                         onClick={() => handleModifyQtyMenu(menuQty + 1)}
-                                        disabled={menuQty >= menu.stock}
+                                        disabled={menuQty >= remainingMenuStock}
                                         type="button"
                                         className={`text-gray-600 transition hover:bg-slate-100 rounded-full p-2 border border-slate-200 ${menuQty < menu.stock ? 'cursor-pointer' : 'cursor-no-drop'} active:bg-slate-200`}>
                                         <PlusIcon strokeWidth={1.5} size={16}/>
@@ -287,10 +299,9 @@ const MenuDetail = () => {
                             <span
                                 className="inline-block font-bold mb-2 text-xl text-end w-full text-slate-600"> Total: {formatRupiah(orderTotalPrice)}</span>
                         </div>
-                        {menu.stock < 1 ?
+                        {remainingMenuStock < 1 ?
                             <button
-                                className="btn-primary w-full bg-primary font-semibold text-white py-2 rounded-md cursor-not-allowed shadow text-lg">Tambah
-                                Pesanan
+                                className="w-full bg-slate-300 font-semibold text-slate-700 py-2 rounded-md cursor-not-allowed shadow text-lg grayscale-0">Habis
                             </button>
                             :
                             <button

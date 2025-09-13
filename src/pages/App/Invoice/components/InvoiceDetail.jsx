@@ -20,15 +20,15 @@ const InvoiceDetail = () => {
     }
     const toNormalTime = (date) => {
         const dateSplit = date.split(" ")[1].split(":");
-        return dateSplit[0] + ":" + dateSplit[1] + " WIB";
+        return dateSplit[0] + ":" + dateSplit[1];
     }
 
     const getStatusColor = (status) => {
         switch (status) {
             case "confirm":
-                return "text-green-200 border-green-200";
+                return "text-sky-300 border-sky-300";
             case "paid":
-                return "text-green-200 border-green-200";
+                return "text-green-300 border-green-300";
             case "canceled":
                 return "text-red-200 border-red-200";
             default:
